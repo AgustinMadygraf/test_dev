@@ -6,3 +6,4 @@ pyrightconfig.json
 .vscode/
 data/*
 !data/.gitkeep
+.coverage
