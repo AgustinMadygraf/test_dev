@@ -10,7 +10,6 @@ from src.domain.entities.expediente import ExpedienteStatus
 class ExpedienteCreate(BaseModel):
     numero: str
     extracto: str
-    owner_id: int
     descripcion: Optional[str] = None
 
 class ExpedienteRead(BaseModel):

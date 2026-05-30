@@ -11,7 +11,6 @@ document.getElementById('expedienteForm').addEventListener('submit', async (e) =
     const payload = {
         numero: document.getElementById('numero').value,
         extracto: document.getElementById('extracto').value,
-        owner_id: parseInt(document.getElementById('owner_id').value),
         descripcion: document.getElementById('descripcion').value || null
     };
 
