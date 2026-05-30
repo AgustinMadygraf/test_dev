@@ -4,6 +4,7 @@ Path: src/infrastructure/fastapi/auth_routes.py
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from src.infrastructure.fastapi.schemas import UserCreate, UserRead
 from src.infrastructure.fastapi.auth_schemas import Token
 from src.infrastructure.fastapi.dependencies import get_auth_use_cases
 from src.use_cases.auth import AuthUseCases
@@ -26,3 +27,17 @@ async def login(
             detail=str(e),
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+@router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
+async def register(
+    user_data: UserCreate,
+    use_cases: AuthUseCases = Depends(get_auth_use_cases)
+):
+    try:
+        return use_cases.register(
+            email=user_data.email,
+            password=user_data.password,
+            full_name=user_data.full_name
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))

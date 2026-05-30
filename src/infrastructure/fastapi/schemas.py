@@ -23,3 +23,17 @@ class ExpedienteRead(BaseModel):
     ultima_modificacion: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+class UserCreate(BaseModel):
+    email: str
+    password: str
+    full_name: Optional[str] = None
+
+class UserRead(BaseModel):
+    id: int
+    email: str
+    full_name: Optional[str] = None
+    is_active: bool
+    is_admin: bool
+
+    model_config = ConfigDict(from_attributes=True)
