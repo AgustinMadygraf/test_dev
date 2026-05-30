@@ -3,10 +3,11 @@ Path: src/domain/services/unit_of_work.py
 """
 
 from abc import ABC, abstractmethod
-from src.domain.services.repositories import IExpedienteRepository
+from src.domain.services.repositories import IExpedienteRepository, IUserRepository
 
 class IUnitOfWork(ABC):
     expedientes: IExpedienteRepository
+    users: IUserRepository
 
     def __enter__(self) -> "IUnitOfWork":
         return self

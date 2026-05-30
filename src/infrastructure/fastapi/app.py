@@ -10,6 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from src.infrastructure.sqlalchemy.database import init_db
 from src.infrastructure.fastapi.routes import router as expediente_router
+from src.infrastructure.fastapi.auth_routes import router as auth_router
 from src.infrastructure.settings.config import settings
 from src.infrastructure.settings.logger import get_logger
 
@@ -23,7 +24,6 @@ async def lifespan(app: FastAPI):
     try:
         init_db()
         logger.info("Base de datos inicializada correctamente.")
-        # Asegurar que el directorio static exista
         os.makedirs(os.path.dirname(STATIC_FILE), exist_ok=True)
     except Exception as e:
         logger.error(f"ERROR CRÍTICO: No se pudo conectar a la base de datos: {e}")
@@ -68,4 +68,5 @@ async def value_error_exception_handler(request: Request, exc: ValueError):
         content={"detail": str(exc)},
     )
 
+app.include_router(auth_router)
 app.include_router(expediente_router)

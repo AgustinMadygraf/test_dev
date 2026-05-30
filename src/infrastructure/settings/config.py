@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     DB_PORT: str = "3306"
     DB_NAME: str = "expedientes.sqlite"
 
+    # Security Settings
+    SECRET_KEY: str = ""
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
     # App Settings
     APP_TITLE: str = "Expediente Management System API"
     APP_DESCRIPTION: str = "API for Expediente Management System"
@@ -42,14 +47,11 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
-        """Genera el DSN. Si no hay host configurado, asume SQLite para el MVP."""
         if not self.DB_HOST or self.DB_HOST == "localhost":
-            # Aseguramos que el archivo se guarde en una carpeta 'data' relativa a la raíz
             data_dir = "./data"
             if not os.path.exists(data_dir):
                 os.makedirs(data_dir)
             return f"sqlite:///{data_dir}/{self.DB_NAME}"
         return f"mysql+pymysql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
-# Instancia única para ser importada por los adaptadores de infraestructura
 settings = Settings()
