@@ -1,5 +1,5 @@
 """
-Path: src/entities/user.py
+Path: src/domain/entities/user.py
 """
 
 from dataclasses import dataclass

@@ -1,5 +1,5 @@
 """
-Path: src/entities/expediente.py
+Path: src/domain/entities/expediente.py
 """
 
 from dataclasses import dataclass, field
