@@ -4,3 +4,5 @@ __pycache__/
 pyrefly.toml
 pyrightconfig.json
 .vscode/
+data/*
+!data/.gitkeep
