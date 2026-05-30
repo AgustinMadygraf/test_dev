@@ -18,6 +18,7 @@ logger = get_logger(__name__, settings.LOG_LEVEL)
 
 STATIC_FILE = os.path.join(os.path.dirname(__file__), "static", "index.html")
 STATIC_DIR = os.path.dirname(STATIC_FILE)
+LOGIN_FILE = os.path.join(STATIC_DIR, "login.html")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -59,6 +60,12 @@ async def read_root():
     if os.path.exists(STATIC_FILE):
         return FileResponse(STATIC_FILE)
     return {"message": "API is running. Frontend file not found at src/infrastructure/fastapi/static/index.html"}
+
+@app.get("/login", tags=["System"])
+async def read_login():
+    if os.path.exists(LOGIN_FILE):
+        return FileResponse(LOGIN_FILE)
+    return JSONResponse(status_code=404, content={"message": "Login file not found"})
 
 
 @app.exception_handler(ValueError)

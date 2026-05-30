@@ -4,7 +4,13 @@
 
 const API_URL = '/expedientes/';
 
-document.addEventListener('DOMContentLoaded', loadExpedientes);
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+        window.location.href = '/login';
+    }
+    loadExpedientes();
+});
 
 document.getElementById('expedienteForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -17,7 +23,10 @@ document.getElementById('expedienteForm').addEventListener('submit', async (e) =
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            },
             body: JSON.stringify(payload)
         });
 
@@ -37,7 +46,17 @@ document.getElementById('expedienteForm').addEventListener('submit', async (e) =
 async function loadExpedientes() {
     const tbody = document.getElementById('expedientesTableBody');
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL, {
+            headers: { 
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+        });
+        
+        if (response.status === 401) {
+            window.location.href = '/login';
+            return; // Detenemos la ejecución si no está autorizado
+        }
+        
         const data = await response.json();
         tbody.innerHTML = data.map(exp => `
             <tr>
@@ -45,7 +64,7 @@ async function loadExpedientes() {
                 <td><strong>${exp.numero}</strong></td>
                 <td>${exp.extracto}</td>
                 <td><span class="badge bg-secondary">${exp.owner_id}</span></td>
-                <td><button class="btn btn-sm btn-outline-info" onclick="alert('Descripción: ' + '${exp.descripcion || 'Sin descripción'}')">Detalles</button></td>
+                <td><button class="btn btn-sm btn-outline-info" onclick="alert('Descripción: ' + \`${exp.descripcion || 'Sin descripción'}\`)">Detalles</button></td>
             </tr>
         `).join('');
     } catch (error) {

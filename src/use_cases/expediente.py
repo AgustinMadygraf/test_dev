@@ -25,9 +25,9 @@ class ExpedienteUseCases:
             result = self.uow.expedientes.save(nuevo_expediente)
             return result
 
-    def listar_expedientes(self) -> List[Expediente]:
+    def listar_expedientes(self, owner_id: Optional[int] = None) -> List[Expediente]:
         with self.uow:
-            return self.uow.expedientes.get_all()
+            return self.uow.expedientes.get_all(owner_id=owner_id)
 
     def obtener_expediente(self, expediente_id: int) -> Optional[Expediente]:
         with self.uow:

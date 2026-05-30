@@ -46,12 +46,14 @@ class SQLAlchemyDatabaseAdapter(IExpedienteRepository):
         obj = self.session.get(ExpedienteORM, expediente_id)
         return self._to_entity(obj) if obj else None
 
-    def get_all(self) -> List[Expediente]:
-        objs = self.session.query(ExpedienteORM).all()
+    def get_all(self, owner_id: Optional[int] = None) -> List[Expediente]:
+        query = self.session.query(ExpedienteORM)
+        if owner_id:
+            query = query.filter_by(owner_id=owner_id)
+        objs = query.all()
         return [self._to_entity(obj) for obj in objs]
 
     def _to_entity(self, orm: ExpedienteORM) -> Expediente:
-        """Convierte un objeto ORM de SQLAlchemy a una Entidad de Dominio."""
         return Expediente(
             id=cast(Any, orm.id),
             numero=cast(Any, orm.numero),
@@ -101,7 +103,6 @@ class SQLAlchemyUserAdapter(IUserRepository):
         return self._to_entity(obj) if obj else None
 
     def _to_entity(self, orm: UserORM) -> User:
-        """Convierte un objeto ORM de SQLAlchemy a una Entidad de Dominio User."""
         return User(
             id=cast(Any, orm.id),
             email=cast(Any, orm.email),

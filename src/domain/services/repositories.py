@@ -30,8 +30,8 @@ class IExpedienteRepository(ABC):
         pass
 
     @abstractmethod
-    def get_all(self) -> List[Expediente]:
-        """Recupera todos los expedientes registrados."""
+    def get_all(self, owner_id: Optional[int] = None) -> List[Expediente]:
+        """Recupera todos los expedientes registrados, opcionalmente filtrados por dueño."""
         pass
 
     @abstractmethod

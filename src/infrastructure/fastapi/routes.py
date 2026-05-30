@@ -17,7 +17,6 @@ async def crear_expediente(
     use_cases: ExpedienteUseCases = Depends(get_expediente_use_cases),
     current_user: User = Depends(get_current_user)
 ):
-    # Solución al error de Pylance: Validamos que el ID exista
     if current_user.id is None:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -33,16 +32,28 @@ async def crear_expediente(
 
 @router.get("/", response_model=List[ExpedienteRead])
 async def listar_expedientes(
-    use_cases: ExpedienteUseCases = Depends(get_expediente_use_cases)
+    use_cases: ExpedienteUseCases = Depends(get_expediente_use_cases),
+    current_user: User = Depends(get_current_user)
 ):
-    return use_cases.listar_expedientes()
+    if current_user.id is None:
+         raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="ID de usuario no encontrado."
+        )
+    return use_cases.listar_expedientes(owner_id=current_user.id)
 
 @router.get("/{expediente_id}", response_model=ExpedienteRead)
 async def obtener_expediente(
     expediente_id: int,
-    use_cases: ExpedienteUseCases = Depends(get_expediente_use_cases)
+    use_cases: ExpedienteUseCases = Depends(get_expediente_use_cases),
+    current_user: User = Depends(get_current_user)
 ):
     expediente = use_cases.obtener_expediente(expediente_id)
     if not expediente:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Expediente no encontrado")
+    
+    # Verificación de propiedad: Solo el dueño puede ver su expediente
+    if expediente.owner_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tiene permisos para ver este expediente")
+        
     return expediente
