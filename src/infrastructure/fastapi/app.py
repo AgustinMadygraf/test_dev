@@ -2,9 +2,11 @@
 Path: src/infrastructure/fastapi/app.py
 """
 
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Response, Request, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from src.infrastructure.sqlalchemy.database import init_db
 from src.infrastructure.fastapi.routes import router as expediente_router
@@ -13,11 +15,16 @@ from src.infrastructure.settings.logger import get_logger
 
 logger = get_logger(__name__, settings.LOG_LEVEL)
 
+STATIC_FILE = os.path.join(os.path.dirname(__file__), "static", "index.html")
+STATIC_DIR = os.path.dirname(STATIC_FILE)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
         init_db()
         logger.info("Base de datos inicializada correctamente.")
+        # Asegurar que el directorio static exista
+        os.makedirs(os.path.dirname(STATIC_FILE), exist_ok=True)
     except Exception as e:
         logger.error(f"ERROR CRÍTICO: No se pudo conectar a la base de datos: {e}")
     yield
@@ -28,6 +35,8 @@ app = FastAPI(
     version=settings.APP_VERSION,
     lifespan=lifespan,
 )
+
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -46,8 +55,10 @@ async def health_check() -> dict[str, str]:
     return {"status": "ok", "message": "Service is running"}
 
 @app.get("/", tags=["System"])
-async def read_root() -> dict[str, str]:
-    return {"message": "Welcome to the Expediente Management System API!"}
+async def read_root():
+    if os.path.exists(STATIC_FILE):
+        return FileResponse(STATIC_FILE)
+    return {"message": "API is running. Frontend file not found at src/infrastructure/fastapi/static/index.html"}
 
 
 @app.exception_handler(ValueError)
