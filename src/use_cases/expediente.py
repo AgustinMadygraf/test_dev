@@ -25,3 +25,6 @@ class ExpedienteUseCases:
 
     def listar_expedientes(self) -> List[Expediente]:
         return self.repository.get_all()
+
+    def obtener_expediente(self, expediente_id: int) -> Optional[Expediente]:
+        return self.repository.get_by_id(expediente_id)

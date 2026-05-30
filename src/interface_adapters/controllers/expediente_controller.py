@@ -5,6 +5,7 @@ Path: src/interface_adapters/controllers/expediente_controller.py
 from dataclasses import dataclass, asdict
 from typing import List, Optional, Dict, Any
 from src.use_cases.expediente import ExpedienteUseCases
+from src.interface_adapters.presenters.expediente_presenter import ExpedientePresenter
 
 @dataclass(frozen=True)
 class ExpedienteCreateDTO:
@@ -14,8 +15,9 @@ class ExpedienteCreateDTO:
     descripcion: Optional[str] = None
 
 class ExpedienteController:
-    def __init__(self, use_cases: ExpedienteUseCases):
+    def __init__(self, use_cases: ExpedienteUseCases, presenter: ExpedientePresenter):
         self.use_cases = use_cases
+        self.presenter = presenter
 
     def crear(self, data: Dict[str, Any]) -> Dict[str, Any]:
         dto = ExpedienteCreateDTO(**data)
@@ -27,8 +29,14 @@ class ExpedienteController:
             descripcion=dto.descripcion
         )
         
-        return asdict(expediente)
+        return self.presenter.format(expediente)
 
     def listar(self) -> List[Dict[str, Any]]:
         expedientes = self.use_cases.listar_expedientes()
-        return [asdict(e) for e in expedientes]
+        return self.presenter.format_list(expedientes)
+
+    def obtener(self, expediente_id: int) -> Optional[Dict[str, Any]]:
+        expediente = self.use_cases.obtener_expediente(expediente_id)
+        if not expediente:
+            return None
+        return self.presenter.format(expediente)
