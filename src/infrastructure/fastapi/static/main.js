@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     loadExpedientes();
 });
 
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('access_token');
+    window.location.href = '/login';
+});
+
 document.getElementById('expedienteForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const payload = {
