@@ -2,6 +2,7 @@ fastapi
 uvicorn[standard]
 sqlalchemy
 mysql-connector-python
+pymysql
 pydantic
 pydantic-settings
 python-multipart

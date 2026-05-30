@@ -2,13 +2,25 @@
 Path: src/infrastructure/fastapi/schemas.py
 """
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from typing import Optional
+from datetime import datetime
+from src.domain.entities.expediente import ExpedienteStatus
 
-class ExpedienteResponse(BaseModel):
-    numero_referencia: str
-    resumen: str
-    responsable_id: int
-    descripcion_detallada: str
-    estado_actual: str
-    fecha_apertura: str
-    es_editable: bool
+class ExpedienteCreate(BaseModel):
+    numero: str
+    extracto: str
+    owner_id: int
+    descripcion: Optional[str] = None
+
+class ExpedienteRead(BaseModel):
+    id: int
+    numero: str
+    extracto: str
+    owner_id: int
+    descripcion: Optional[str] = None
+    estado: ExpedienteStatus
+    fecha_creacion: datetime
+    ultima_modificacion: datetime
+
+    model_config = ConfigDict(from_attributes=True)

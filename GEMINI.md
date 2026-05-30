@@ -18,3 +18,6 @@ Registro de decisiones y prompts clave utilizados durante el desarrollo.
 9. *Gestión de Dependencias*: Creación de `requirements.txt` y resolución de importaciones de infraestructura (SQLAlchemy).
 10. *Infraestructura*: Configuración de conexión y sesión de base de datos en `src/infrastructure/database.py`.
 11. *Contratos de Repositorio*: Definición de `IUserRepository` e `IExpedienteRepository` en la capa de dominio para inversión de dependencias.
+12. *Implementación de Interfaces*: Implementación del método `get_by_id` en `ExpedienteGateway` y adición de firma `find_by_id` en el protocolo `DatabaseAdapter`.
+13. *Infraestructura y Cableado de Clean Architecture*: Creación de un `InMemoryDatabaseAdapter` como adaptador concreto provisional y refactorización del endpoint de FastAPI en `app.py` y de los esquemas de respuesta en `schemas.py` para utilizar todo el flujo Clean Architecture (Gateway -> Entidad -> Presenter) de forma desacoplada.
+14. *Refactor del Presenter*: Inyección del `ExpedientePresenter` en el `ExpedienteController` para cumplir rigurosamente con la separación de capas en Clean Architecture, evitando que el punto de entrada de FastAPI deba orquestar el formateo de datos.

@@ -1,0 +1,63 @@
+"""
+Path: src/infrastructure/sqlalchemy/adapter.py
+"""
+
+from typing import List, Optional, Any, cast
+from src.domain.entities.expediente import Expediente
+from src.domain.services.repositories import IExpedienteRepository
+from src.infrastructure.sqlalchemy.models import ExpedienteORM
+from sqlalchemy.orm import Session
+
+class SQLAlchemyDatabaseAdapter(IExpedienteRepository):
+    def __init__(self, session: Session):
+        self.session = session
+
+    def save(self, expediente: Expediente) -> Expediente:
+        if expediente.id:
+            obj = self.session.get(ExpedienteORM, expediente.id)
+            if obj:
+                orm_obj = cast(Any, obj)
+                orm_obj.numero = expediente.numero
+                orm_obj.extracto = expediente.extracto
+                orm_obj.descripcion = expediente.descripcion
+                orm_obj.estado = expediente.estado
+                orm_obj.owner_id = expediente.owner_id
+                self.session.flush()
+                return self._to_entity(obj)
+        
+        new_obj = ExpedienteORM(
+            numero=expediente.numero,
+            extracto=expediente.extracto,
+            owner_id=expediente.owner_id,
+            descripcion=expediente.descripcion,
+            estado=expediente.estado
+        )
+        self.session.add(new_obj)
+        self.session.flush()
+        self.session.refresh(new_obj)
+        return self._to_entity(new_obj)
+
+    def get_by_numero(self, numero: str) -> Optional[Expediente]:
+        obj = self.session.query(ExpedienteORM).filter_by(numero=numero).first()
+        return self._to_entity(obj) if obj else None
+
+    def get_by_id(self, expediente_id: int) -> Optional[Expediente]:
+        obj = self.session.get(ExpedienteORM, expediente_id)
+        return self._to_entity(obj) if obj else None
+
+    def get_all(self) -> List[Expediente]:
+        objs = self.session.query(ExpedienteORM).all()
+        return [self._to_entity(obj) for obj in objs]
+
+    def _to_entity(self, orm: ExpedienteORM) -> Expediente:
+        """Convierte un objeto ORM de SQLAlchemy a una Entidad de Dominio."""
+        return Expediente(
+            id=cast(Any, orm.id),
+            numero=cast(Any, orm.numero),
+            extracto=cast(Any, orm.extracto),
+            owner_id=cast(Any, orm.owner_id),
+            descripcion=cast(Any, orm.descripcion),
+            estado=cast(Any, orm.estado),
+            fecha_creacion=cast(Any, orm.fecha_creacion),
+            ultima_modificacion=cast(Any, orm.ultima_modificacion)
+        )

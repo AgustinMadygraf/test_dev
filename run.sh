@@ -9,7 +9,5 @@ else
     exit 1
 fi
 
-echo "Iniciando servidor FastAPI para el Sistema de Gestión de Expedientes..."
-
 # Ejecución de uvicorn apuntando a la instancia de la app
 uvicorn src.infrastructure.fastapi.app:app --reload --host 127.0.0.1 --port 8000
