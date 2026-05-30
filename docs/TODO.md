@@ -3,7 +3,7 @@
 ## Fase 1: Entorno y Base de Datos
 - [ ] Configurar `docker-compose.yml` con FastAPI y MySQL 8.0.
 - [ ] Configurar SQLAlchemy y Alembic para migraciones.
-- [ ] Definir modelos: `User` y `Expediente`.
+- [x] Definir modelos de dominio (entidades puras): `User` y `Expediente`.
 
 ## Fase 2: Backend y Autenticación
 - [ ] Implementar lógica de autenticación (Login).
