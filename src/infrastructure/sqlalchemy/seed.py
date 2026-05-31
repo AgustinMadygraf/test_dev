@@ -5,7 +5,7 @@ Path: src/infrastructure/sqlalchemy/seed.py
 from passlib.context import CryptContext
 from src.infrastructure.settings.config import settings
 from src.infrastructure.settings.logger import get_logger
-from src.infrastructure.sqlalchemy.database import engine, SessionLocal, Base
+from src.infrastructure.sqlalchemy.database import init_db, SessionLocal
 from src.infrastructure.sqlalchemy.models import UserORM as User, ExpedienteORM as Expediente
 
 logger = get_logger("db_seed", settings.LOG_LEVEL)
@@ -16,7 +16,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def run_seed():
     logger.info("Iniciando validación de base de datos y seeding...")
     
-    Base.metadata.create_all(bind=engine)
+    init_db()
     
     db = SessionLocal()
     try:
