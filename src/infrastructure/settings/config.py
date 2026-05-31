@@ -3,7 +3,7 @@ Path: src/infrastructure/settings/config.py
 """
 
 import os
-from typing import List, Any, Union
+from typing import List, Any, Union, Optional
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -19,7 +19,12 @@ class Settings(BaseSettings):
     DB_PASSWORD: str = ""
     DB_HOST: str = "localhost"
     DB_PORT: str = "3306"
-    DB_NAME: str = "expedientes.sqlite"
+    DB_NAME: str = "expedientes.db"
+    DATABASE_URL: str = ""
+
+    # Credenciales Admin (Seeding)
+    ADMIN_EMAIL: str = ""
+    ADMIN_PASSWORD: str = ""
 
     # Security Settings
     SECRET_KEY: str = ""
@@ -45,8 +50,17 @@ class Settings(BaseSettings):
             return [i.strip() for i in v.split(",")]
         return v
 
+    @field_validator("ADMIN_EMAIL", "ADMIN_PASSWORD", "SECRET_KEY")
+    @classmethod
+    def check_required_settings(cls, v: str) -> str:
+        if not v or v.strip() == "":
+            raise ValueError("Este campo es obligatorio. Verificá tu archivo .env")
+        return v
+
     @property
     def database_url(self) -> str:
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
         if not self.DB_HOST or self.DB_HOST == "localhost":
             data_dir = "./data"
             if not os.path.exists(data_dir):
