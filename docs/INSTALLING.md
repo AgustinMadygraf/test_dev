@@ -12,16 +12,10 @@ Este manual describe el proceso para levantar el Sistema de Gestión de Expedien
     ADMIN_PASSWORD=tu_contraseña_segura
     ```
 
-2.  **Construcción de la Imagen:**
-    Para compilar el entorno y preparar las dependencias (incluyendo el parche de `bcrypt==4.0.1`):
+2.  **Construcción y Ejecución:**
+    Para compilar el entorno, preparar las dependencias y levantar los servicios en un solo paso:
     ```bash
-    docker compose build
-    ```
-
-3.  **Ejecución:**
-    Levanta los servicios en segundo plano:
-    ```bash
-    docker compose up -d
+    docker compose up -d --build
     ```
 
 ## Carga de Datos (Seeding)
