@@ -7,3 +7,4 @@ pyrightconfig.json
 data/*
 !data/.gitkeep
 .coverage
+frontend/node_modules/

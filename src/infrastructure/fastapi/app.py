@@ -16,17 +16,19 @@ from src.infrastructure.settings.logger import get_logger
 
 logger = get_logger(__name__, settings.LOG_LEVEL)
 
-STATIC_FILE = os.path.join(os.path.dirname(__file__), "static", "index.html")
-STATIC_DIR = os.path.dirname(STATIC_FILE)
-LOGIN_FILE = os.path.join(STATIC_DIR, "login.html")
-REGISTER_FILE = os.path.join(STATIC_DIR, "register.html")
+# Serve the standalone frontend directory at the repository root: ./frontend
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+FRONTEND_DIR = os.path.join(ROOT_DIR, 'frontend')
+STATIC_FILE = os.path.join(FRONTEND_DIR, 'index.html')
+STATIC_DIR = FRONTEND_DIR
+LOGIN_FILE = os.path.join(FRONTEND_DIR, 'login.html')
+REGISTER_FILE = os.path.join(FRONTEND_DIR, 'register.html')
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
         init_db()
         logger.info("Base de datos inicializada correctamente.")
-        os.makedirs(os.path.dirname(STATIC_FILE), exist_ok=True)
     except Exception as e:
         logger.error(f"ERROR CRÍTICO: No se pudo conectar a la base de datos: {e}")
     yield

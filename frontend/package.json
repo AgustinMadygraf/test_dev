@@ -1,0 +1,12 @@
+{
+  "name": "test_dev-frontend-tests",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "jest --detectOpenHandles --runInBand"
+  },
+  "devDependencies": {
+    "jest": "29.7.0",
+    "jsdom": "22.1.0"
+  }
+}

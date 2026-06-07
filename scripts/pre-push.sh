@@ -18,17 +18,29 @@ fi
 # echo "🎨 Comprobando formato y linting..."
 # ruff check . || exit 1
 
-# 3. Ejecutar tests con cobertura
-echo "🧪 Ejecutando tests con cobertura (Umbral mínimo: 85%)..."
-
-# --cov=src: Indica qué carpeta medir
-# --cov-report=term-missing: Muestra qué líneas exactas no están testeadas
-# --cov-fail-under=85: Hace que el comando falle si no se llega al porcentaje
+# 3. Ejecutar tests Python con cobertura
+echo "🧪 Ejecutando tests Python con cobertura (Umbral mínimo: 85%)..."
 PYTHONPATH=. pytest --cov=src --cov-report=term-missing --cov-fail-under=85 tests/
-
-if [ $? -eq 0 ]; then
-    echo "✅ Calidad aprobada. Procediendo con el push."
-else
-    echo "❌ Error: La cobertura de tests es inferior al 85% o hay tests fallidos."
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Tests Python fallidos o cobertura insuficiente."
     exit 1
 fi
+
+# 4. Ejecutar tests frontend si existe carpeta frontend
+if [ -d "frontend" ]; then
+    echo "🧩 Ejecutando tests frontend (Jest)..."
+    if ! command -v npm >/dev/null 2>&1; then
+        echo "⚠️  npm no está disponible. Omisión de tests frontend."
+    else
+        pushd frontend >/dev/null || exit 1
+        if [ -d node_modules ]; then
+            npm test --silent || { echo "❌ Tests frontend fallidos."; popd >/dev/null; exit 1; }
+        else
+            npm ci --no-audit --no-fund || { echo "❌ Falló npm ci."; popd >/dev/null; exit 1; }
+            npm test --silent || { echo "❌ Tests frontend fallidos."; popd >/dev/null; exit 1; }
+        fi
+        popd >/dev/null
+    fi
+fi
+
+echo "✅ Validaciones pre-push completadas correctamente."

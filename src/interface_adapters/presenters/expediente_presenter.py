@@ -10,7 +10,7 @@ class ExpedientePresenter:
         return {
             "numero_referencia": expediente.numero,
             "resumen": expediente.extracto.upper(),
-            "responsable_id": expediente.id_propietario,
+            "id_propietario": expediente.id_propietario,
             "descripcion_detallada": expediente.descripcion or "Sin descripción",
             "estado_actual": expediente.estado.value.replace("_", " ").capitalize(),
             "fecha_apertura": expediente.fecha_creacion.strftime("%Y-%m-%d %H:%M:%S"),
