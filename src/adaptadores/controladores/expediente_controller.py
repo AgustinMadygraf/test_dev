@@ -1,11 +1,11 @@
 """
-Path: src/interface_adapters/controllers/expediente_controller.py
+Path: src/adaptadores/controladores/expediente_controller.py
 """
 
 from dataclasses import dataclass, asdict
 from typing import List, Optional, Dict, Any
 from src.aplicacion.expediente import ExpedienteUseCases
-from src.interface_adapters.presenters.expediente_presenter import ExpedientePresenter
+from src.adaptadores.presentadores.expediente_presenter import ExpedientePresenter
 
 @dataclass(frozen=True)
 class ExpedienteCreateDTO:

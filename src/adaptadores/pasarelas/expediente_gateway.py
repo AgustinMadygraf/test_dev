@@ -1,5 +1,5 @@
 """
-Path: src/interface_adapters/gateways/expediente_gateway.py
+Path: src/adaptadores/pasarelas/expediente_gateway.py
 """
 
 from typing import List, Optional, Any, Dict, Protocol
@@ -16,28 +16,33 @@ class ExpedienteGateway(IRepositorioExpediente):
     def __init__(self, db_adapter: DatabaseAdapter):
         self.db = db_adapter
 
-    def save(self, expediente: Expediente) -> Expediente:
+    def guardar(self, expediente: Expediente) -> Expediente:
         data: Dict[str, Any] = {
             "numero": expediente.numero,
             "extracto": expediente.extracto,
             "id_propietario": expediente.id_propietario,
-            "descripcion": expediente.descripcion
+            "descripcion": expediente.descripcion,
+            "estado": expediente.estado,
+            "fecha_creacion": expediente.fecha_creacion,
+            "ultima_modificacion": expediente.ultima_modificacion
         }
         if expediente.id is not None:
             data["id"] = expediente.id
         persisted_data = self.db.save(data)
         return self._map_to_entity(persisted_data)
 
-    def get_by_numero(self, numero: str) -> Optional[Expediente]:
+    def buscar_por_numero(self, numero: str) -> Optional[Expediente]:
         data = self.db.find_by_numero(numero)
         return self._map_to_entity(data) if data else None
 
-    def get_by_id(self, expediente_id: int) -> Optional[Expediente]:
+    def buscar_por_id(self, expediente_id: int) -> Optional[Expediente]:
         data = self.db.find_by_id(expediente_id)
         return self._map_to_entity(data) if data else None
 
-    def get_all(self) -> List[Expediente]:
+    def buscar_todos(self, id_propietario: Optional[int] = None) -> List[Expediente]:
         raw_list = self.db.find_all()
+        if id_propietario is not None:
+            raw_list = [item for item in raw_list if item.get("id_propietario") == id_propietario]
         return [self._map_to_entity(item) for item in raw_list]
 
     def _map_to_entity(self, data: Dict[str, Any]) -> Expediente:
@@ -47,5 +52,8 @@ class ExpedienteGateway(IRepositorioExpediente):
             numero=data["numero"],
             extracto=data["extracto"],
             id_propietario=data["id_propietario"],
-            descripcion=data.get("descripcion")
+            descripcion=data.get("descripcion"),
+            estado=data.get("estado"),
+            fecha_creacion=data.get("fecha_creacion"),
+            ultima_modificacion=data.get("ultima_modificacion")
         )

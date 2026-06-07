@@ -1,5 +1,5 @@
 """
-Path: src/interface_adapters/presenters/expediente_presenter.py
+Path: src/adaptadores/presentadores/expediente_presenter.py
 """
 
 from typing import Any, Dict, List
@@ -8,7 +8,7 @@ from src.dominio.entidades.expediente import Expediente
 class ExpedientePresenter:
     def format(self, expediente: Expediente) -> Dict[str, Any]:
         return {
-            "numero_referencia": expediente.numero,
+            "numero_referencia": str(expediente.numero),
             "resumen": expediente.extracto.upper(),
             "id_propietario": expediente.id_propietario,
             "descripcion_detallada": expediente.descripcion or "Sin descripción",

@@ -1,6 +1,7 @@
 .venv/
 .env
 __pycache__/
+.mypy_cache/
 pyrefly.toml
 pyrightconfig.json
 .vscode/
@@ -8,3 +9,4 @@ data/*
 !data/.gitkeep
 .coverage
 frontend/node_modules/
+uvicorn.log
