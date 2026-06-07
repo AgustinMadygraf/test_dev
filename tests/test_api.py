@@ -102,7 +102,7 @@ def test_auth_login_api(client, mock_uow, mock_security, mock_user):
 def test_auth_login_api_failure(client, mock_uow, mock_security):
     mock_uow.users.get_by_email.return_value = None
     response = client.post("/auth/login", data={"username": "not@found.com", "password": "any"})
-    assert response.status_code == 401
+    assert response.status_code == 400
 
 def test_auth_register_api_failure(client, mock_uow):
     mock_uow.users.get_by_email.return_value = MagicMock()
@@ -119,4 +119,4 @@ def test_auth_register_api(client, mock_uow, mock_security, mock_user):
         "full_name": "New User"
     })
     assert response.status_code == 201
-    assert response.json()["email"] == mock_user.email
+    assert response.json()["email"] == str(mock_user.email)

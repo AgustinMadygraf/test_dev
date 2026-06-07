@@ -5,6 +5,7 @@ Path: tests/test_use_cases.py
 import pytest
 from unittest.mock import MagicMock
 from src.domain.entities.expediente import Expediente
+from src.domain.exceptions import BusinessRuleViolationError
 
 def test_register_user_success(auth_use_cases, mock_uow, mock_security, mock_user):
     # Arrange
@@ -16,13 +17,13 @@ def test_register_user_success(auth_use_cases, mock_uow, mock_security, mock_use
     result = auth_use_cases.register("test@example.com", "password123", "Test User")
 
     # Assert
-    assert result.email == "test@example.com"
+    assert str(result.email) == "test@example.com"
     mock_uow.users.save.assert_called_once()
 
 def test_register_user_already_exists(auth_use_cases, mock_uow, mock_user):
     mock_uow.users.get_by_email.return_value = mock_user
     
-    with pytest.raises(ValueError, match="El correo electrónico ya está registrado"):
+    with pytest.raises(BusinessRuleViolationError, match="El correo electrónico ya está registrado"):
         auth_use_cases.register("test@example.com", "password", "Name")
 
 def test_login_success(auth_use_cases, mock_uow, mock_security, mock_user):
@@ -42,7 +43,7 @@ def test_login_invalid_credentials(auth_use_cases, mock_uow, mock_security, mock
     mock_uow.users.get_by_email.return_value = mock_user
     mock_security.verify_password.return_value = False
     
-    with pytest.raises(ValueError, match="Credenciales inválidas"):
+    with pytest.raises(BusinessRuleViolationError, match="Credenciales inválidas"):
         auth_use_cases.login("test@example.com", "wrong_pass")
 
 def test_login_inactive_user(auth_use_cases, mock_uow, mock_security, mock_user):
@@ -50,7 +51,7 @@ def test_login_inactive_user(auth_use_cases, mock_uow, mock_security, mock_user)
     mock_uow.users.get_by_email.return_value = mock_user
     mock_security.verify_password.return_value = True
     
-    with pytest.raises(ValueError, match="Usuario inactivo"):
+    with pytest.raises(BusinessRuleViolationError, match="Usuario inactivo"):
         auth_use_cases.login("test@example.com", "password123")
 
 def test_crear_expediente_success(expediente_use_cases, mock_uow):
@@ -63,7 +64,7 @@ def test_crear_expediente_success(expediente_use_cases, mock_uow):
     result = expediente_use_cases.crear_expediente("123", "Test", 1)
 
     # Assert
-    assert result.numero == "123"
+    assert str(result.numero) == "123"
     mock_uow.expedientes.save.assert_called_once()
 
 def test_crear_expediente_already_exists(expediente_use_cases, mock_uow):
@@ -71,7 +72,7 @@ def test_crear_expediente_already_exists(expediente_use_cases, mock_uow):
     mock_uow.expedientes.get_by_numero.return_value = MagicMock(spec=Expediente)
     
     # Act & Assert
-    with pytest.raises(ValueError, match="ya existe"):
+    with pytest.raises(BusinessRuleViolationError, match="ya existe"):
         expediente_use_cases.crear_expediente("123", "Test", 1)
 
 def test_listar_expedientes(expediente_use_cases, mock_uow):

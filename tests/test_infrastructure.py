@@ -47,7 +47,7 @@ def test_database_adapter_save_update(mock_session):
     exp = Expediente(id=1, numero="NEW", extracto="New", owner_id=1)
     result = adapter.save(exp)
     
-    assert result.numero == "NEW"
+    assert str(result.numero) == "NEW"
     mock_session.flush.assert_called_once()
 
 def test_database_adapter_get_by_id(mock_session):

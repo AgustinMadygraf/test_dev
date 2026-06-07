@@ -1,7 +1,3 @@
-"""
-Path: src/infrastructure/sqlalchemy/adapter.py
-"""
-
 from typing import List, Optional, Any, cast
 from src.domain.entities.expediente import Expediente
 from src.domain.entities.user import User
@@ -18,7 +14,7 @@ class SQLAlchemyDatabaseAdapter(IExpedienteRepository):
             obj = self.session.get(ExpedienteORM, expediente.id)
             if obj:
                 orm_obj = cast(Any, obj)
-                orm_obj.numero = expediente.numero
+                orm_obj.numero = str(expediente.numero)
                 orm_obj.extracto = expediente.extracto
                 orm_obj.descripcion = expediente.descripcion
                 orm_obj.estado = expediente.estado
@@ -27,7 +23,7 @@ class SQLAlchemyDatabaseAdapter(IExpedienteRepository):
                 return self._to_entity(obj)
         
         new_obj = ExpedienteORM(
-            numero=expediente.numero,
+            numero=str(expediente.numero),
             extracto=expediente.extracto,
             owner_id=expediente.owner_id,
             descripcion=expediente.descripcion,
@@ -74,7 +70,7 @@ class SQLAlchemyUserAdapter(IUserRepository):
             obj = self.session.get(UserORM, user.id)
             if obj:
                 orm_obj = cast(Any, obj)
-                orm_obj.email = user.email
+                orm_obj.email = str(user.email)
                 orm_obj.hashed_password = user.hashed_password
                 orm_obj.full_name = user.full_name
                 orm_obj.is_active = user.is_active
@@ -83,7 +79,7 @@ class SQLAlchemyUserAdapter(IUserRepository):
                 return self._to_entity(obj)
         
         new_obj = UserORM(
-            email=user.email,
+            email=str(user.email),
             hashed_password=user.hashed_password,
             full_name=user.full_name,
             is_active=user.is_active,

@@ -2,8 +2,9 @@
 Path: src/infrastructure/fastapi/auth_schemas.py
 """
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from typing import Optional
+from src.infrastructure.fastapi.schemas import EmailAnnotated
 
 class Token(BaseModel):
     access_token: str
@@ -13,5 +14,5 @@ class TokenData(BaseModel):
     email: Optional[str] = None
 
 class LoginRequest(BaseModel):
-    username: EmailStr
+    username: EmailAnnotated
     password: str

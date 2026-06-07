@@ -1,10 +1,7 @@
-"""
-Path: src/use_cases/expediente.py
-"""
-
 from typing import List, Optional
 from src.domain.entities.expediente import Expediente
 from src.domain.services.unit_of_work import IUnitOfWork
+from src.domain.exceptions import BusinessRuleViolationError
 
 class ExpedienteUseCases:
     def __init__(self, uow: IUnitOfWork):
@@ -14,9 +11,9 @@ class ExpedienteUseCases:
         with self.uow:
             existing = self.uow.expedientes.get_by_numero(numero)
             if existing:
-                raise ValueError(f"El expediente con número {numero} ya existe.")
+                raise BusinessRuleViolationError(f"El expediente con número {numero} ya existe.")
             
-            nuevo_expediente = Expediente(
+            nuevo_expediente = Expediente.crear_nuevo(
                 numero=numero,
                 extracto=extracto,
                 owner_id=owner_id,
