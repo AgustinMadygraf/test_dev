@@ -1,4 +1,4 @@
-# Path: src/dominio/servicios/seguridad.py
+# Path: src/aplicacion/servicios/seguridad.py
 
 from abc import ABC, abstractmethod
 from typing import Optional

@@ -85,7 +85,7 @@ class ExpedienteRenderer {
             '<td><span class="text-muted small">#' + exp.id + '</span></td>' +
             '<td><strong class="text-primary">' + exp.numero + '</strong></td>' +
             '<td>' + exp.extracto + '</td>' +
-            '<td><span class="badge rounded-pill bg-light text-dark border">Owner: ' + exp.owner_id + '</span></td>' +
+            '<td><span class="badge rounded-pill bg-light text-dark border">Owner: ' + (exp.owner_id || exp.id_propietario || exp.responsable_id) + '</span></td>' +
             '<td>' +
                 '<button class="btn btn-sm btn-link text-decoration-none" ' +
                         'onclick="app.showDetails(\'' + exp.id + '\', \'' + exp.numero + '\', \'' + exp.extracto + '\', \'' + descEscaped + '\')">' +

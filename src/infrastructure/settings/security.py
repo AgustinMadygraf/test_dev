@@ -1,12 +1,10 @@
-"""
-Path: src/infrastructure/settings/security.py
-"""
+# Path: src/infrastructure/settings/security.py
 
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 from jose import jwt
 from passlib.context import CryptContext
-from src.dominio.servicios.seguridad import IServicioSeguridad
+from src.aplicacion.servicios.seguridad import IServicioSeguridad
 from src.infrastructure.settings.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -36,11 +34,11 @@ def decode_access_token(token: str) -> Optional[dict]:
         return None
 
 class JWTSecurityService(IServicioSeguridad):
-    def verificar_contrasena(self, plain_password: str, hashed_password: str) -> bool:
-        return verificar_contrasena(plain_password, hashed_password)
+    def verificar_contrasena(self, contrasena_plana: str, contrasena_hash: str) -> bool:
+        return verificar_contrasena(contrasena_plana, contrasena_hash)
 
-    def obtener_hash_contrasena(self, password: str) -> str:
-        return obtener_hash_contrasena(password)
+    def obtener_hash_contrasena(self, contrasena: str) -> str:
+        return obtener_hash_contrasena(contrasena)
 
     def crear_token_acceso(self, datos: dict, delta_expiracion: Optional[timedelta] = None) -> str:
         return crear_token_acceso(datos, delta_expiracion)

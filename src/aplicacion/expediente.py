@@ -1,6 +1,8 @@
+# Path: src/aplicacion/expediente.py
+
 from typing import List, Optional
 from src.dominio.entidades.expediente import Expediente
-from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.aplicacion.servicios.unidad_de_trabajo import IUnidadDeTrabajo
 from src.dominio.excepciones import ErrorViolacionReglaNegocio
 
 class ExpedienteUseCases:

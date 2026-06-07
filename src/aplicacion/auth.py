@@ -1,8 +1,8 @@
 from src.dominio.objetos_valor import CorreoElectronico
 from typing import Optional
 from src.dominio.entidades.usuario import Usuario
-from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
-from src.dominio.servicios.seguridad import IServicioSeguridad
+from src.aplicacion.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.aplicacion.servicios.seguridad import IServicioSeguridad
 from src.dominio.excepciones import ErrorViolacionReglaNegocio
 
 class AuthUseCases:
@@ -13,7 +13,9 @@ class AuthUseCases:
     def register(self, correo: str, contrasena: str, nombre_completo: Optional[str] = None) -> Usuario:
         with self.uow:
             # 1. Verificar si el usuario ya existe
-            existing_user = self.uow.usuarios.buscar_por_correo(correo)
+            correo_vo = correo if isinstance(correo, CorreoElectronico) else CorreoElectronico(correo)
+            correo_str = correo_vo.direccion if hasattr(correo_vo, 'direccion') else str(correo_vo)
+            existing_user = self.uow.usuarios.buscar_por_correo(correo_str)
             if existing_user:
                 raise ErrorViolacionReglaNegocio("El correo electrónico ya está registrado")
 
@@ -22,13 +24,15 @@ class AuthUseCases:
 
             # 3. Crear entidad y persistir
             # El objeto Usuario validará el correo internamente
-            new_user = Usuario(correo=correo, contrasena_hash=contrasena_hash, nombre_completo=nombre_completo)
+            new_user = Usuario(correo=correo_vo, contrasena_hash=contrasena_hash, nombre_completo=nombre_completo)
             created_user = self.uow.usuarios.guardar(new_user)
             return created_user
 
     def login(self, correo: str, password: str) -> dict:
         with self.uow:
-            user = self.uow.usuarios.buscar_por_correo(correo)
+            correo_vo = correo if isinstance(correo, CorreoElectronico) else CorreoElectronico(correo)
+            correo_str = correo_vo.direccion if hasattr(correo_vo, 'direccion') else str(correo_vo)
+            user = self.uow.usuarios.buscar_por_correo(correo_str)
             
             if not user or not self.security_service.verificar_contrasena(password, user.contrasena_hash):
                 raise ErrorViolacionReglaNegocio("Credenciales inválidas")

@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy.orm import sessionmaker, Session
-from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.aplicacion.servicios.unidad_de_trabajo import IUnidadDeTrabajo
 from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
 
 class SQLAlchemyUnitOfWork(IUnidadDeTrabajo):

@@ -1,6 +1,4 @@
-"""
-Path: src/infrastructure/fastapi/dependencies.py
-"""
+# Path: src/infrastructure/fastapi/dependencies.py
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -8,10 +6,10 @@ import hashlib
 import hmac
 from src.infrastructure.sqlalchemy.database import SessionLocal
 from src.infrastructure.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
-from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.aplicacion.servicios.unidad_de_trabajo import IUnidadDeTrabajo
 from src.aplicacion.expediente import ExpedienteUseCases
 from src.aplicacion.auth import AuthUseCases
-from src.dominio.servicios.seguridad import IServicioSeguridad
+from src.aplicacion.servicios.seguridad import IServicioSeguridad
 from src.infrastructure.settings.security import decode_access_token, JWTSecurityService
 
 
