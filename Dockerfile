@@ -16,6 +16,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+# El frontend se copia en el contenedor junto con el resto del proyecto.
+# FastAPI sirve estos archivos desde /app/frontend.
 
 # Crear carpeta para la base de datos SQLite y asignar permisos
 RUN mkdir -p /app/data

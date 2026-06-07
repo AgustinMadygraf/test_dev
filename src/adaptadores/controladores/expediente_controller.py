@@ -4,7 +4,7 @@ Path: src/adaptadores/controladores/expediente_controller.py
 
 from dataclasses import dataclass, asdict
 from typing import List, Optional, Dict, Any
-from src.aplicacion.expediente import ExpedienteUseCases
+from src.aplicacion.expediente import CasosUsoExpediente
 from src.adaptadores.presentadores.expediente_presenter import ExpedientePresenter
 
 @dataclass(frozen=True)
@@ -15,7 +15,7 @@ class ExpedienteCreateDTO:
     descripcion: Optional[str] = None
 
 class ExpedienteController:
-    def __init__(self, use_cases: ExpedienteUseCases, presenter: ExpedientePresenter):
+    def __init__(self, use_cases: CasosUsoExpediente, presenter: ExpedientePresenter):
         self.use_cases = use_cases
         self.presenter = presenter
 

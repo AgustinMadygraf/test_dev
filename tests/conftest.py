@@ -7,15 +7,15 @@ from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 from src.infrastructure.fastapi.app import app
 from src.infrastructure.fastapi.dependencies import get_uow, get_security_service, get_current_user
-from src.aplicacion.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.aplicacion.servicios.unidad_de_trabajo import UnidadDeTrabajo
 from src.aplicacion.servicios.seguridad import IServicioSeguridad
 from src.dominio.servicios.repositorios import IRepositorioUsuario, IRepositorioExpediente
-from src.aplicacion.auth import AuthUseCases
-from src.aplicacion.expediente import ExpedienteUseCases
+from src.aplicacion.auth import CasosUsoAutenticacion
+from src.aplicacion.expediente import CasosUsoExpediente
 
 @pytest.fixture
 def mock_uow():
-    uow = MagicMock(spec=IUnidadDeTrabajo)
+    uow = MagicMock(spec=UnidadDeTrabajo)
     uow.usuarios = MagicMock(spec=IRepositorioUsuario)
     uow.expedientes = MagicMock(spec=IRepositorioExpediente)
     # Simular el context manager
@@ -28,11 +28,11 @@ def mock_security():
 
 @pytest.fixture
 def auth_use_cases(mock_uow, mock_security):
-    return AuthUseCases(mock_uow, mock_security)
+    return CasosUsoAutenticacion(mock_uow, mock_security)
 
 @pytest.fixture
 def expediente_use_cases(mock_uow):
-    return ExpedienteUseCases(mock_uow)
+    return CasosUsoExpediente(mock_uow)
 
 @pytest.fixture
 def mock_user():

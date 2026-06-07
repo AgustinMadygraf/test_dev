@@ -7,19 +7,19 @@ from fastapi.security import OAuth2PasswordRequestForm
 from src.infrastructure.fastapi.schemas import UsuarioCreate, UsuarioRead
 from src.infrastructure.fastapi.auth_schemas import Token
 from src.infrastructure.fastapi.dependencies import get_auth_use_cases
-from src.aplicacion.auth import AuthUseCases
+from src.aplicacion.auth import CasosUsoAutenticacion
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
 @router.post("/login", response_model=Token)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    use_cases: AuthUseCases = Depends(get_auth_use_cases)
+    use_cases: CasosUsoAutenticacion = Depends(get_auth_use_cases)
 ):
     try:
-        return use_cases.login(
-            correo=form_data.username, 
-            password=form_data.password
+        return use_cases.iniciar_sesion(
+            correo=form_data.username,
+            contrasena=form_data.password,
         )
     except ValueError as e:
         raise HTTPException(
@@ -31,13 +31,13 @@ async def login(
 @router.post("/register", response_model=UsuarioRead, status_code=status.HTTP_201_CREATED)
 async def register(
     user_data: UsuarioCreate,
-    use_cases: AuthUseCases = Depends(get_auth_use_cases)
+    use_cases: CasosUsoAutenticacion = Depends(get_auth_use_cases)
 ):
     try:
-        return use_cases.register(
+        return use_cases.registrar(
             correo=user_data.correo,
             contrasena=user_data.contrasena,
-            nombre_completo=user_data.nombre_completo
+            nombre_completo=user_data.nombre_completo,
         )
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))

@@ -3,23 +3,23 @@
 from abc import ABC, abstractmethod
 from src.dominio.servicios.repositorios import IRepositorioExpediente, IRepositorioUsuario
 
-class IUnidadDeTrabajo(ABC):
+class UnidadDeTrabajo(ABC):
     expedientes: IRepositorioExpediente
     usuarios: IRepositorioUsuario
 
-    def __enter__(self) -> "IUnidadDeTrabajo":
+    def __enter__(self) -> "UnidadDeTrabajo":
         return self
 
-    def __exit__(self, tipo_excepcion, valor_excepcion, traceback):
+    def __exit__(self, tipo_excepcion, valor_excepcion, traza):
         if tipo_excepcion:
-            self.rollback()
+            self.revertir()
         else:
-            self.commit()
+            self.confirmar()
 
     @abstractmethod
-    def commit(self):
+    def confirmar(self):
         pass
 
     @abstractmethod
-    def rollback(self):
+    def revertir(self):
         pass

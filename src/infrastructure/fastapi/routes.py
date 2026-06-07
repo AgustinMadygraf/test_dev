@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from src.infrastructure.fastapi.schemas import ExpedienteCreate, ExpedienteRead
 from src.infrastructure.fastapi.dependencies import get_expediente_use_cases, get_current_user
-from src.aplicacion.expediente import ExpedienteUseCases
+from src.aplicacion.expediente import CasosUsoExpediente
 from src.dominio.entidades.usuario import Usuario
 
 router = APIRouter(prefix="/expedientes", tags=["Expedientes"])
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/expedientes", tags=["Expedientes"])
 @router.post("/", response_model=ExpedienteRead, status_code=status.HTTP_201_CREATED)
 async def crear_expediente(
     data: ExpedienteCreate,
-    use_cases: ExpedienteUseCases = Depends(get_expediente_use_cases),
+    use_cases: CasosUsoExpediente = Depends(get_expediente_use_cases),
     current_user: Usuario = Depends(get_current_user)
 ):
     if current_user.id is None:
@@ -32,7 +32,7 @@ async def crear_expediente(
 
 @router.get("/", response_model=List[ExpedienteRead])
 async def listar_expedientes(
-    use_cases: ExpedienteUseCases = Depends(get_expediente_use_cases),
+    use_cases: CasosUsoExpediente = Depends(get_expediente_use_cases),
     current_user: Usuario = Depends(get_current_user)
 ):
     if current_user.id is None:
@@ -45,7 +45,7 @@ async def listar_expedientes(
 @router.get("/{expediente_id}", response_model=ExpedienteRead)
 async def obtener_expediente(
     expediente_id: int,
-    use_cases: ExpedienteUseCases = Depends(get_expediente_use_cases),
+    use_cases: CasosUsoExpediente = Depends(get_expediente_use_cases),
     current_user: Usuario = Depends(get_current_user)
 ):
     expediente = use_cases.obtener_expediente(expediente_id)

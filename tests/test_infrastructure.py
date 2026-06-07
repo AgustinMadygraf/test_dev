@@ -74,20 +74,20 @@ def test_user_adapter_guardar_new(mock_session):
     assert result.id == 1
     mock_session.add.assert_called_once()
 
-def test_uow_automatic_commit(mock_session):
+def test_uow_automatic_confirmar(mock_session):
     session_factory = MagicMock(return_value=mock_session)
     uow = SQLAlchemyUnitOfWork(session_factory)
     
-    # Al salir del bloque sin excepción, IUnidadDeTrabajo llama a commit()
+    # Al salir del bloque sin excepción, UnidadDeTrabajo llama a confirmar()
     with uow:
         pass
     mock_session.commit.assert_called_once()
 
-def test_uow_manual_rollback(mock_session):
+def test_uow_manual_revertir(mock_session):
     session_factory = MagicMock(return_value=mock_session)
     uow = SQLAlchemyUnitOfWork(session_factory)
     with uow:
-        uow.rollback()
+        uow.revertir()
     mock_session.rollback.assert_called_once()
 
 def test_uow_rollback_on_exception(mock_session):

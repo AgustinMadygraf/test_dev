@@ -1,9 +1,9 @@
 from typing import Optional
 from sqlalchemy.orm import sessionmaker, Session
-from src.aplicacion.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.aplicacion.servicios.unidad_de_trabajo import UnidadDeTrabajo
 from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
 
-class SQLAlchemyUnitOfWork(IUnidadDeTrabajo):
+class SQLAlchemyUnitOfWork(UnidadDeTrabajo):
     def __init__(self, session_factory: sessionmaker):
         self.session_factory = session_factory
         self.session: Optional[Session] = None
@@ -21,7 +21,7 @@ class SQLAlchemyUnitOfWork(IUnidadDeTrabajo):
         if self.session:
             self.session.close()
 
-    def commit(self):
+    def confirmar(self):
         if not self.session:
             return
         try:
@@ -30,6 +30,6 @@ class SQLAlchemyUnitOfWork(IUnidadDeTrabajo):
             self.session.rollback()
             raise
 
-    def rollback(self):
+    def revertir(self):
         if self.session:
             self.session.rollback()

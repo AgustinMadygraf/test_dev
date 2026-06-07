@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 from src.adaptadores.controladores.expediente_controller import ExpedienteController
 from src.adaptadores.pasarelas.expediente_gateway import ExpedienteGateway
 from src.adaptadores.presentadores.expediente_presenter import ExpedientePresenter
-from src.aplicacion.expediente import ExpedienteUseCases
+from src.aplicacion.expediente import CasosUsoExpediente
 from src.dominio.entidades.expediente import EstadoExpediente, Expediente
 
 
@@ -46,7 +46,7 @@ def test_presenter_formats_list():
 
 
 def test_expediente_controller_crear():
-    use_cases = MagicMock(spec=ExpedienteUseCases)
+    use_cases = MagicMock(spec=CasosUsoExpediente)
     presenter = ExpedientePresenter()
     controller = ExpedienteController(use_cases, presenter)
     expediente = Expediente(numero="123", extracto="Test", id_propietario=1)
@@ -69,7 +69,7 @@ def test_expediente_controller_crear():
 
 
 def test_expediente_controller_listar():
-    use_cases = MagicMock(spec=ExpedienteUseCases)
+    use_cases = MagicMock(spec=CasosUsoExpediente)
     presenter = ExpedientePresenter()
     controller = ExpedienteController(use_cases, presenter)
     expediente = Expediente(numero="123", extracto="Test", id_propietario=1)
@@ -83,7 +83,7 @@ def test_expediente_controller_listar():
 
 
 def test_expediente_controller_obtener_no_encontrado():
-    use_cases = MagicMock(spec=ExpedienteUseCases)
+    use_cases = MagicMock(spec=CasosUsoExpediente)
     presenter = ExpedientePresenter()
     controller = ExpedienteController(use_cases, presenter)
     use_cases.obtener_expediente.return_value = None
