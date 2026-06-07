@@ -10,8 +10,8 @@ from src.infrastructure.fastapi.dependencies import get_uow, get_security_servic
 from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
 from src.dominio.servicios.seguridad import IServicioSeguridad
 from src.dominio.servicios.repositorios import IRepositorioUsuario, IRepositorioExpediente
-from src.use_cases.auth import AuthUseCases
-from src.use_cases.expediente import ExpedienteUseCases
+from src.aplicacion.auth import AuthUseCases
+from src.aplicacion.expediente import ExpedienteUseCases
 
 @pytest.fixture
 def mock_uow():

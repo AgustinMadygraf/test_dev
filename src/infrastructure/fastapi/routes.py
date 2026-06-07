@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from src.infrastructure.fastapi.schemas import ExpedienteCreate, ExpedienteRead
 from src.infrastructure.fastapi.dependencies import get_expediente_use_cases, get_current_user
-from src.use_cases.expediente import ExpedienteUseCases
+from src.aplicacion.expediente import ExpedienteUseCases
 from src.dominio.entidades.usuario import Usuario
 
 router = APIRouter(prefix="/expedientes", tags=["Expedientes"])

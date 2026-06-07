@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from src.infrastructure.fastapi.schemas import UsuarioCreate, UsuarioRead
 from src.infrastructure.fastapi.auth_schemas import Token
 from src.infrastructure.fastapi.dependencies import get_auth_use_cases
-from src.use_cases.auth import AuthUseCases
+from src.aplicacion.auth import AuthUseCases
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 

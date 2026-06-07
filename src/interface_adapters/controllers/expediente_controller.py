@@ -4,7 +4,7 @@ Path: src/interface_adapters/controllers/expediente_controller.py
 
 from dataclasses import dataclass, asdict
 from typing import List, Optional, Dict, Any
-from src.use_cases.expediente import ExpedienteUseCases
+from src.aplicacion.expediente import ExpedienteUseCases
 from src.interface_adapters.presenters.expediente_presenter import ExpedientePresenter
 
 @dataclass(frozen=True)
