@@ -1,6 +1,8 @@
+# Path: src/dominio/objetos_valor.py
+
 from dataclasses import dataclass
 import re
-from src.domain.excepciones import ErrorValorInvalido
+from src.dominio.excepciones import ErrorValorInvalido
 
 @dataclass(frozen=True)
 class CorreoElectronico:

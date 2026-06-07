@@ -4,8 +4,8 @@ Path: tests/test_use_cases.py
 
 import pytest
 from unittest.mock import MagicMock
-from src.domain.entidades.expediente import Expediente
-from src.domain.excepciones import ErrorViolacionReglaNegocio
+from src.dominio.entidades.expediente import Expediente
+from src.dominio.excepciones import ErrorViolacionReglaNegocio
 
 def test_register_user_success(auth_use_cases, mock_uow, mock_security, mock_user):
     # Arrange

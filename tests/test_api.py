@@ -3,7 +3,7 @@ Path: tests/test_api.py
 """
 
 import pytest
-from src.domain.entidades.expediente import Expediente, EstadoExpediente
+from src.dominio.entidades.expediente import Expediente, EstadoExpediente
 from unittest.mock import MagicMock
 
 def test_read_main(client):

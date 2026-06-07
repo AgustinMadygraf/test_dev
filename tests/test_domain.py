@@ -1,7 +1,7 @@
 import pytest
-from src.domain.objetos_valor import CorreoElectronico, NumeroExpediente
-from src.domain.entidades.expediente import Expediente, EstadoExpediente
-from src.domain.excepciones import ErrorValorInvalido, ErrorTransicionEstadoInvalida
+from src.dominio.objetos_valor import CorreoElectronico, NumeroExpediente
+from src.dominio.entidades.expediente import Expediente, EstadoExpediente
+from src.dominio.excepciones import ErrorValorInvalido, ErrorTransicionEstadoInvalida
 
 def test_email_valido():
     email = CorreoElectronico("test@example.com")

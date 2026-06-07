@@ -75,7 +75,7 @@ async def read_register():
     return JSONResponse(status_code=404, content={"message": "Register file not found"})
 
 
-from src.domain.excepciones import ErrorViolacionReglaNegocio
+from src.dominio.excepciones import ErrorViolacionReglaNegocio
 
 @app.exception_handler(ErrorViolacionReglaNegocio)
 async def business_rule_violation_exception_handler(request: Request, exc: ErrorViolacionReglaNegocio):

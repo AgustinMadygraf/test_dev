@@ -1,6 +1,8 @@
+# Path: src/dominio/entidades/usuario.py
+
 from dataclasses import dataclass
 from typing import Optional
-from src.domain.objetos_valor import CorreoElectronico
+from src.dominio.objetos_valor import CorreoElectronico
 
 @dataclass
 class Usuario:

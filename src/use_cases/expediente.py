@@ -1,7 +1,7 @@
 from typing import List, Optional
-from src.domain.entidades.expediente import Expediente
-from src.domain.servicios.unidad_de_trabajo import IUnidadDeTrabajo
-from src.domain.excepciones import ErrorViolacionReglaNegocio
+from src.dominio.entidades.expediente import Expediente
+from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.dominio.excepciones import ErrorViolacionReglaNegocio
 
 class ExpedienteUseCases:
     def __init__(self, uow: IUnidadDeTrabajo):

@@ -3,7 +3,7 @@ Path: src/interface_adapters/presenters/expediente_presenter.py
 """
 
 from typing import Any, Dict, List
-from src.domain.entidades.expediente import Expediente
+from src.dominio.entidades.expediente import Expediente
 
 class ExpedientePresenter:
     def format(self, expediente: Expediente) -> Dict[str, Any]:

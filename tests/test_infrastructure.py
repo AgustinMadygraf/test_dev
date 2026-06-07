@@ -6,9 +6,9 @@ import pytest
 from unittest.mock import MagicMock
 from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
 from src.infrastructure.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
-from src.domain.entidades.expediente import Expediente
+from src.dominio.entidades.expediente import Expediente
 from src.infrastructure.sqlalchemy.models import ExpedienteORM, UsuarioORM
-from src.domain.entidades.usuario import Usuario
+from src.dominio.entidades.usuario import Usuario
 
 def test_database_adapter_buscar_todos(mock_session):
     adapter = SQLAlchemyDatabaseAdapter(mock_session)

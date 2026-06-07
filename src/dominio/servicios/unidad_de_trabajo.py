@@ -1,5 +1,7 @@
+# Path: src/dominio/servicios/unidad_de_trabajo.py
+
 from abc import ABC, abstractmethod
-from src.domain.servicios.repositorios import IRepositorioExpediente, IRepositorioUsuario
+from src.dominio.servicios.repositorios import IRepositorioExpediente, IRepositorioUsuario
 
 class IUnidadDeTrabajo(ABC):
     expedientes: IRepositorioExpediente

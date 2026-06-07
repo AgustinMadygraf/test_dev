@@ -1,3 +1,5 @@
+# Path: src/dominio/excepciones.py
+
 class ErrorDeDominio(Exception):
     pass
 

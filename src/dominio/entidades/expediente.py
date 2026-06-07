@@ -1,9 +1,11 @@
+# Path: src/dominio/entidades/expediente.py
+
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional, Union
-from src.domain.objetos_valor import NumeroExpediente
-from src.domain.excepciones import ErrorTransicionEstadoInvalida
+from src.dominio.objetos_valor import NumeroExpediente
+from src.dominio.excepciones import ErrorTransicionEstadoInvalida
 
 class EstadoExpediente(Enum):
     BORRADOR = "borrador"

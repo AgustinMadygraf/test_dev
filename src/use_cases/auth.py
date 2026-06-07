@@ -1,9 +1,9 @@
-from src.domain.objetos_valor import CorreoElectronico
+from src.dominio.objetos_valor import CorreoElectronico
 from typing import Optional
-from src.domain.entidades.usuario import Usuario
-from src.domain.servicios.unidad_de_trabajo import IUnidadDeTrabajo
-from src.domain.servicios.seguridad import IServicioSeguridad
-from src.domain.excepciones import ErrorViolacionReglaNegocio
+from src.dominio.entidades.usuario import Usuario
+from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.dominio.servicios.seguridad import IServicioSeguridad
+from src.dominio.excepciones import ErrorViolacionReglaNegocio
 
 class AuthUseCases:
     def __init__(self, uow: IUnidadDeTrabajo, security_service: IServicioSeguridad):

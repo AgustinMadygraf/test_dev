@@ -1,7 +1,9 @@
+# Path: src/dominio/servicios/repositorios.py
+
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from src.domain.entidades.usuario import Usuario
-from src.domain.entidades.expediente import Expediente
+from src.dominio.entidades.usuario import Usuario
+from src.dominio.entidades.expediente import Expediente
 
 class IRepositorioUsuario(ABC):
     @abstractmethod

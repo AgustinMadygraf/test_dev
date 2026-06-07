@@ -7,9 +7,9 @@ from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 from src.infrastructure.fastapi.app import app
 from src.infrastructure.fastapi.dependencies import get_uow, get_security_service, get_current_user
-from src.domain.servicios.unidad_de_trabajo import IUnidadDeTrabajo
-from src.domain.servicios.seguridad import IServicioSeguridad
-from src.domain.servicios.repositorios import IRepositorioUsuario, IRepositorioExpediente
+from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.dominio.servicios.seguridad import IServicioSeguridad
+from src.dominio.servicios.repositorios import IRepositorioUsuario, IRepositorioExpediente
 from src.use_cases.auth import AuthUseCases
 from src.use_cases.expediente import ExpedienteUseCases
 
@@ -36,7 +36,7 @@ def expediente_use_cases(mock_uow):
 
 @pytest.fixture
 def mock_user():
-    from src.domain.entidades.usuario import Usuario
+    from src.dominio.entidades.usuario import Usuario
     return Usuario(
         id=1,
         correo="test@example.com",

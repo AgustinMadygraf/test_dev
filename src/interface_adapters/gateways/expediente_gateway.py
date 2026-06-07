@@ -3,8 +3,8 @@ Path: src/interface_adapters/gateways/expediente_gateway.py
 """
 
 from typing import List, Optional, Any, Dict, Protocol
-from src.domain.entidades.expediente import Expediente
-from src.domain.servicios.repositorios import IRepositorioExpediente
+from src.dominio.entidades.expediente import Expediente
+from src.dominio.servicios.repositorios import IRepositorioExpediente
 
 class DatabaseAdapter(Protocol):
     def save(self, data: Dict[str, Any]) -> Dict[str, Any]: ...

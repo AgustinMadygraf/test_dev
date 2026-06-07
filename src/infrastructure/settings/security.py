@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 from jose import jwt
 from passlib.context import CryptContext
-from src.domain.servicios.seguridad import IServicioSeguridad
+from src.dominio.servicios.seguridad import IServicioSeguridad
 from src.infrastructure.settings.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

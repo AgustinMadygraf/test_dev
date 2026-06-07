@@ -8,10 +8,10 @@ import hashlib
 import hmac
 from src.infrastructure.sqlalchemy.database import SessionLocal
 from src.infrastructure.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
-from src.domain.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.dominio.servicios.unidad_de_trabajo import IUnidadDeTrabajo
 from src.use_cases.expediente import ExpedienteUseCases
 from src.use_cases.auth import AuthUseCases
-from src.domain.servicios.seguridad import IServicioSeguridad
+from src.dominio.servicios.seguridad import IServicioSeguridad
 from src.infrastructure.settings.security import decode_access_token, JWTSecurityService
 
 

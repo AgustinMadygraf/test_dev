@@ -1,4 +1,4 @@
-from src.domain.objetos_valor import NumeroExpediente, CorreoElectronico
+from src.dominio.objetos_valor import NumeroExpediente, CorreoElectronico
 """
 Path: src/infrastructure/fastapi/schemas.py
 """
@@ -6,7 +6,7 @@ Path: src/infrastructure/fastapi/schemas.py
 from pydantic import BaseModel, ConfigDict, PlainSerializer, BeforeValidator
 from typing import Annotated, Optional, Any
 from datetime import datetime
-from src.domain.entidades.expediente import EstadoExpediente
+from src.dominio.entidades.expediente import EstadoExpediente
 
 def validate_numero(value: Any) -> NumeroExpediente:
     if isinstance(value, NumeroExpediente):

@@ -4,7 +4,7 @@ Path: src/infrastructure/sqlalchemy/models.py
 
 from sqlalchemy import Column, Integer, String, DateTime, Enum, Text, Boolean
 from sqlalchemy.orm import declarative_base
-from src.domain.entidades.expediente import EstadoExpediente
+from src.dominio.entidades.expediente import EstadoExpediente
 from datetime import datetime, timezone
 
 Base = declarative_base()
