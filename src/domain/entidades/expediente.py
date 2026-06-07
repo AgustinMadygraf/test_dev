@@ -1,13 +1,11 @@
-# Path: src/domain/entities/expediente.py
-
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional, Union
-from src.domain.value_objects import NumeroExpediente
-from src.domain.exceptions import InvalidStateTransitionError
+from src.domain.objetos_valor import NumeroExpediente
+from src.domain.excepciones import ErrorTransicionEstadoInvalida
 
-class ExpedienteStatus(Enum):
+class EstadoExpediente(Enum):
     BORRADOR = "borrador"
     EN_CURSO = "en_curso"
     FINALIZADO = "finalizado"
@@ -17,35 +15,35 @@ class ExpedienteStatus(Enum):
 class Expediente:
     numero: NumeroExpediente
     extracto: str
-    owner_id: int
+    id_propietario: int
     id: Optional[int] = None
     descripcion: Optional[str] = None
     fecha_creacion: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     ultima_modificacion: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    estado: ExpedienteStatus = ExpedienteStatus.BORRADOR
+    estado: EstadoExpediente = EstadoExpediente.BORRADOR
 
     def __post_init__(self):
         if isinstance(self.numero, str):
             self.numero = NumeroExpediente(self.numero)
 
     @classmethod
-    def crear_nuevo(cls, numero: Union[str, NumeroExpediente], extracto: str, owner_id: int, descripcion: Optional[str] = None):
+    def crear_nuevo(cls, numero: Union[str, NumeroExpediente], extracto: str, id_propietario: int, descripcion: Optional[str] = None):
         if not isinstance(numero, NumeroExpediente):
             numero = NumeroExpediente(numero)
         return cls(
             numero=numero,
             extracto=extracto,
-            owner_id=owner_id,
+            id_propietario=id_propietario,
             descripcion=descripcion,
-            estado=ExpedienteStatus.BORRADOR
+            estado=EstadoExpediente.BORRADOR
         )
 
-    def cambiar_estado(self, nuevo_estado: ExpedienteStatus):
-        if self.estado == ExpedienteStatus.ARCHIVADO:
-            raise InvalidStateTransitionError("No se puede cambiar el estado de un expediente ARCHIVADO")
+    def cambiar_estado(self, nuevo_estado: EstadoExpediente):
+        if self.estado == EstadoExpediente.ARCHIVADO:
+            raise ErrorTransicionEstadoInvalida("No se puede cambiar el estado de un expediente ARCHIVADO")
         
-        if self.estado == ExpedienteStatus.FINALIZADO and nuevo_estado == ExpedienteStatus.BORRADOR:
-            raise InvalidStateTransitionError("No se puede volver a BORRADOR desde FINALIZADO")
+        if self.estado == EstadoExpediente.FINALIZADO and nuevo_estado == EstadoExpediente.BORRADOR:
+            raise ErrorTransicionEstadoInvalida("No se puede volver a BORRADOR desde FINALIZADO")
 
         self.estado = nuevo_estado
         self.ultima_modificacion = datetime.now(timezone.utc)

@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from src.infrastructure.settings.config import settings
 from src.infrastructure.settings.logger import get_logger
 from src.infrastructure.sqlalchemy.database import init_db, SessionLocal
-from src.infrastructure.sqlalchemy.models import UserORM as User, ExpedienteORM as Expediente
+from src.infrastructure.sqlalchemy.models import UsuarioORM as User, ExpedienteORM as Expediente
 
 logger = get_logger("db_seed", settings.LOG_LEVEL)
 
@@ -20,11 +20,11 @@ def run_seed():
     
     db = SessionLocal()
     try:
-        admin = db.query(User).filter(User.email == settings.ADMIN_EMAIL).first()
+        admin = db.query(User).filter(User.correo == settings.ADMIN_EMAIL).first()
         if not admin:
             logger.info(f"Creando usuario administrador: {settings.ADMIN_EMAIL}")
             hashed_pw = pwd_context.hash(settings.ADMIN_PASSWORD)
-            admin = User(email=settings.ADMIN_EMAIL, hashed_password=hashed_pw)
+            admin = User(correo=settings.ADMIN_EMAIL, contrasena_hash=hashed_pw)
             db.add(admin)
             db.commit()
             db.refresh(admin)
@@ -34,7 +34,7 @@ def run_seed():
                 numero="2024-INI-001",
                 extracto="Expediente de prueba inicial",
                 descripcion="Creado automáticamente por el sistema de seeding.",
-                owner_id=admin.id
+                id_propietario=admin.id
             ))
             db.commit()
             logger.info("✅ Seeding completado con éxito.")

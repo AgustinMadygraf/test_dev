@@ -1,15 +1,15 @@
 from typing import List, Optional, Any, cast
-from src.domain.entities.expediente import Expediente
-from src.domain.entities.user import User
-from src.domain.services.repositories import IExpedienteRepository, IUserRepository
-from src.infrastructure.sqlalchemy.models import ExpedienteORM, UserORM
+from src.domain.entidades.expediente import Expediente
+from src.domain.entidades.usuario import Usuario
+from src.domain.servicios.repositorios import IRepositorioExpediente, IRepositorioUsuario
+from src.infrastructure.sqlalchemy.models import ExpedienteORM, UsuarioORM
 from sqlalchemy.orm import Session
 
-class SQLAlchemyDatabaseAdapter(IExpedienteRepository):
+class SQLAlchemyDatabaseAdapter(IRepositorioExpediente):
     def __init__(self, session: Session):
         self.session = session
 
-    def save(self, expediente: Expediente) -> Expediente:
+    def guardar(self, expediente: Expediente) -> Expediente:
         if expediente.id:
             obj = self.session.get(ExpedienteORM, expediente.id)
             if obj:
@@ -18,14 +18,14 @@ class SQLAlchemyDatabaseAdapter(IExpedienteRepository):
                 orm_obj.extracto = expediente.extracto
                 orm_obj.descripcion = expediente.descripcion
                 orm_obj.estado = expediente.estado
-                orm_obj.owner_id = expediente.owner_id
+                orm_obj.id_propietario = expediente.id_propietario
                 self.session.flush()
                 return self._to_entity(obj)
         
         new_obj = ExpedienteORM(
             numero=str(expediente.numero),
             extracto=expediente.extracto,
-            owner_id=expediente.owner_id,
+            id_propietario=expediente.id_propietario,
             descripcion=expediente.descripcion,
             estado=expediente.estado
         )
@@ -34,18 +34,18 @@ class SQLAlchemyDatabaseAdapter(IExpedienteRepository):
         self.session.refresh(new_obj)
         return self._to_entity(new_obj)
 
-    def get_by_numero(self, numero: str) -> Optional[Expediente]:
+    def buscar_por_numero(self, numero: str) -> Optional[Expediente]:
         obj = self.session.query(ExpedienteORM).filter_by(numero=numero).first()
         return self._to_entity(obj) if obj else None
 
-    def get_by_id(self, expediente_id: int) -> Optional[Expediente]:
+    def buscar_por_id(self, expediente_id: int) -> Optional[Expediente]:
         obj = self.session.get(ExpedienteORM, expediente_id)
         return self._to_entity(obj) if obj else None
 
-    def get_all(self, owner_id: Optional[int] = None) -> List[Expediente]:
+    def buscar_todos(self, id_propietario: Optional[int] = None) -> List[Expediente]:
         query = self.session.query(ExpedienteORM)
-        if owner_id:
-            query = query.filter_by(owner_id=owner_id)
+        if id_propietario:
+            query = query.filter_by(id_propietario=id_propietario)
         objs = query.all()
         return [self._to_entity(obj) for obj in objs]
 
@@ -54,56 +54,56 @@ class SQLAlchemyDatabaseAdapter(IExpedienteRepository):
             id=cast(Any, orm.id),
             numero=cast(Any, orm.numero),
             extracto=cast(Any, orm.extracto),
-            owner_id=cast(Any, orm.owner_id),
+            id_propietario=cast(Any, orm.id_propietario),
             descripcion=cast(Any, orm.descripcion),
             estado=cast(Any, orm.estado),
             fecha_creacion=cast(Any, orm.fecha_creacion),
             ultima_modificacion=cast(Any, orm.ultima_modificacion)
         )
 
-class SQLAlchemyUserAdapter(IUserRepository):
+class SQLAlchemyUsuarioAdapter(IRepositorioUsuario):
     def __init__(self, session: Session):
         self.session = session
 
-    def save(self, user: User) -> User:
-        if user.id:
-            obj = self.session.get(UserORM, user.id)
+    def guardar(self, usuario: Usuario) -> Usuario:
+        if usuario.id:
+            obj = self.session.get(UsuarioORM, usuario.id)
             if obj:
                 orm_obj = cast(Any, obj)
-                orm_obj.email = str(user.email)
-                orm_obj.hashed_password = user.hashed_password
-                orm_obj.full_name = user.full_name
-                orm_obj.is_active = user.is_active
-                orm_obj.is_admin = user.is_admin
+                orm_obj.correo = str(usuario.correo)
+                orm_obj.contrasena_hash = usuario.contrasena_hash
+                orm_obj.nombre_completo = usuario.nombre_completo
+                orm_obj.es_activo = usuario.es_activo
+                orm_obj.es_administrador = usuario.es_administrador
                 self.session.flush()
                 return self._to_entity(obj)
         
-        new_obj = UserORM(
-            email=str(user.email),
-            hashed_password=user.hashed_password,
-            full_name=user.full_name,
-            is_active=user.is_active,
-            is_admin=user.is_admin
+        new_obj = UsuarioORM(
+            correo=str(usuario.correo),
+            contrasena_hash=usuario.contrasena_hash,
+            nombre_completo=usuario.nombre_completo,
+            es_activo=usuario.es_activo,
+            es_administrador=usuario.es_administrador
         )
         self.session.add(new_obj)
         self.session.flush()
         self.session.refresh(new_obj)
         return self._to_entity(new_obj)
 
-    def get_by_email(self, email: str) -> Optional[User]:
-        obj = self.session.query(UserORM).filter_by(email=email).first()
+    def buscar_por_correo(self, correo: str) -> Optional[Usuario]:
+        obj = self.session.query(UsuarioORM).filter_by(correo=correo).first()
         return self._to_entity(obj) if obj else None
 
-    def get_by_id(self, user_id: int) -> Optional[User]:
-        obj = self.session.get(UserORM, user_id)
+    def buscar_por_id(self, usuario_id: int) -> Optional[Usuario]:
+        obj = self.session.get(UsuarioORM, usuario_id)
         return self._to_entity(obj) if obj else None
 
-    def _to_entity(self, orm: UserORM) -> User:
-        return User(
+    def _to_entity(self, orm: UsuarioORM) -> Usuario:
+        return Usuario(
             id=cast(Any, orm.id),
-            email=cast(Any, orm.email),
-            hashed_password=cast(Any, orm.hashed_password),
-            full_name=cast(Any, orm.full_name),
-            is_active=cast(Any, orm.is_active),
-            is_admin=cast(Any, orm.is_admin)
+            correo=cast(Any, orm.correo),
+            contrasena_hash=cast(Any, orm.contrasena_hash),
+            nombre_completo=cast(Any, orm.nombre_completo),
+            es_activo=cast(Any, orm.es_activo),
+            es_administrador=cast(Any, orm.es_administrador)
         )

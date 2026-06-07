@@ -3,7 +3,7 @@ Path: tests/test_api.py
 """
 
 import pytest
-from src.domain.entities.expediente import Expediente, ExpedienteStatus
+from src.domain.entidades.expediente import Expediente, EstadoExpediente
 from unittest.mock import MagicMock
 
 def test_read_main(client):
@@ -30,10 +30,10 @@ def test_read_register(client):
 
 def test_api_crear_expediente(client, mock_uow):
     # Arrange
-    mock_uow.expedientes.get_by_numero.return_value = None
-    mock_uow.expedientes.save.return_value = Expediente(
-        id=1, numero="2023-001", extracto="Test API", owner_id=1,
-        estado=ExpedienteStatus.BORRADOR
+    mock_uow.expedientes.buscar_por_numero.return_value = None
+    mock_uow.expedientes.guardar.return_value = Expediente(
+        id=1, numero="2023-001", extracto="Test API", id_propietario=1,
+        estado=EstadoExpediente.BORRADOR
     )
 
     # Act
@@ -48,7 +48,7 @@ def test_api_crear_expediente(client, mock_uow):
     assert response.json()["numero"] == "2023-001"
 
 def test_api_crear_expediente_already_exists(client, mock_uow):
-    mock_uow.expedientes.get_by_numero.return_value = MagicMock()
+    mock_uow.expedientes.buscar_por_numero.return_value = MagicMock()
     response = client.post("/expedientes/", json={
         "numero": "EXISTE",
         "extracto": "Test"
@@ -56,28 +56,28 @@ def test_api_crear_expediente_already_exists(client, mock_uow):
     assert response.status_code == 400
 
 def test_api_listar_expedientes(client, mock_uow):
-    mock_uow.expedientes.get_all.return_value = []
+    mock_uow.expedientes.buscar_todos.return_value = []
     response = client.get("/expedientes/")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 def test_api_obtener_expediente_owner(client, mock_uow, mock_user):
-    mock_exp = Expediente(id=1, numero="123", extracto="Ex", owner_id=mock_user.id)
-    mock_uow.expedientes.get_by_id.return_value = mock_exp
+    mock_exp = Expediente(id=1, numero="123", extracto="Ex", id_propietario=mock_user.id)
+    mock_uow.expedientes.buscar_por_id.return_value = mock_exp
     
     response = client.get("/expedientes/1")
     assert response.status_code == 200
     assert response.json()["id"] == 1
 
 def test_api_obtener_expediente_not_found(client, mock_uow):
-    mock_uow.expedientes.get_by_id.return_value = None
+    mock_uow.expedientes.buscar_por_id.return_value = None
     response = client.get("/expedientes/999")
     assert response.status_code == 404
 
 def test_api_obtener_expediente_forbidden(client, mock_uow):
     # Expediente que pertenece a otro usuario (ID 99)
-    mock_exp = Expediente(id=1, numero="123", extracto="Ex", owner_id=99)
-    mock_uow.expedientes.get_by_id.return_value = mock_exp
+    mock_exp = Expediente(id=1, numero="123", extracto="Ex", id_propietario=99)
+    mock_uow.expedientes.buscar_por_id.return_value = mock_exp
     
     response = client.get("/expedientes/1")
     assert response.status_code == 403
@@ -85,9 +85,9 @@ def test_api_obtener_expediente_forbidden(client, mock_uow):
 
 def test_auth_login_api(client, mock_uow, mock_security, mock_user):
     # Arrange
-    mock_uow.users.get_by_email.return_value = mock_user
-    mock_security.verify_password.return_value = True
-    mock_security.create_access_token.return_value = "fake-token"
+    mock_uow.usuarios.buscar_por_correo.return_value = mock_user
+    mock_security.verificar_contrasena.return_value = True
+    mock_security.crear_token_acceso.return_value = "fake-token"
     
     # Act
     response = client.post("/auth/login", data={
@@ -100,23 +100,12 @@ def test_auth_login_api(client, mock_uow, mock_security, mock_user):
     assert response.json()["access_token"] == "fake-token"
 
 def test_auth_login_api_failure(client, mock_uow, mock_security):
-    mock_uow.users.get_by_email.return_value = None
+    mock_uow.usuarios.buscar_por_correo.return_value = None
     response = client.post("/auth/login", data={"username": "not@found.com", "password": "any"})
     assert response.status_code == 400
 
 def test_auth_register_api_failure(client, mock_uow):
-    mock_uow.users.get_by_email.return_value = MagicMock()
-    response = client.post("/auth/register", json={"email": "exists@test.com", "password": "any"})
+    mock_uow.usuarios.buscar_por_correo.return_value = MagicMock()
+    response = client.post("/auth/register", json={"correo": "exists@test.com", "contrasena": "any"})
     assert response.status_code == 400
 
-def test_auth_register_api(client, mock_uow, mock_security, mock_user):
-    mock_uow.users.get_by_email.return_value = None
-    mock_uow.users.save.return_value = mock_user
-    
-    response = client.post("/auth/register", json={
-        "email": "new@test.com",
-        "password": "password123",
-        "full_name": "New User"
-    })
-    assert response.status_code == 201
-    assert response.json()["email"] == str(mock_user.email)

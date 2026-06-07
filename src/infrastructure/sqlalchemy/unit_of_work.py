@@ -1,13 +1,9 @@
-"""
-Path: src/infrastructure/sqlalchemy/unit_of_work.py
-"""
-
 from typing import Optional
 from sqlalchemy.orm import sessionmaker, Session
-from src.domain.services.unit_of_work import IUnitOfWork
-from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUserAdapter
+from src.domain.servicios.unidad_de_trabajo import IUnidadDeTrabajo
+from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
 
-class SQLAlchemyUnitOfWork(IUnitOfWork):
+class SQLAlchemyUnitOfWork(IUnidadDeTrabajo):
     def __init__(self, session_factory: sessionmaker):
         self.session_factory = session_factory
         self.session: Optional[Session] = None
@@ -17,7 +13,7 @@ class SQLAlchemyUnitOfWork(IUnitOfWork):
         if self.session is None:
             raise RuntimeError("Failed to create a new SQLAlchemy session.")
         self.expedientes = SQLAlchemyDatabaseAdapter(self.session)
-        self.users = SQLAlchemyUserAdapter(self.session)
+        self.usuarios = SQLAlchemyUsuarioAdapter(self.session)
         return super().__enter__()
 
     def __exit__(self, exc_type, exc_val, exc_tb):

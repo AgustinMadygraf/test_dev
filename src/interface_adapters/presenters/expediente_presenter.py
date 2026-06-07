@@ -3,14 +3,14 @@ Path: src/interface_adapters/presenters/expediente_presenter.py
 """
 
 from typing import Any, Dict, List
-from src.domain.entities.expediente import Expediente
+from src.domain.entidades.expediente import Expediente
 
 class ExpedientePresenter:
     def format(self, expediente: Expediente) -> Dict[str, Any]:
         return {
             "numero_referencia": expediente.numero,
             "resumen": expediente.extracto.upper(),
-            "responsable_id": expediente.owner_id,
+            "responsable_id": expediente.id_propietario,
             "descripcion_detallada": expediente.descripcion or "Sin descripción",
             "estado_actual": expediente.estado.value.replace("_", " ").capitalize(),
             "fecha_apertura": expediente.fecha_creacion.strftime("%Y-%m-%d %H:%M:%S"),

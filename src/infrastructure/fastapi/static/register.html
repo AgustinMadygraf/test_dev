@@ -26,8 +26,8 @@
                     </div>
                     <form id="registerForm">
                         <div class="mb-3">
-                            <label for="full_name" class="form-label small fw-bold">Nombre Completo</label>
-                            <input type="text" id="full_name" class="form-control" placeholder="Juan Pérez">
+                            <label for="nombre_completo" class="form-label small fw-bold">Nombre Completo</label>
+                            <input type="text" id="nombre_completo" class="form-control" placeholder="Juan Pérez">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label small fw-bold">Email</label>
@@ -82,7 +82,7 @@
             if (text) text.classList.add('opacity-50');
 
             const payload = {
-                full_name: document.getElementById('full_name').value || null,
+                nombre_completo: document.getElementById('nombre_completo').value || null,
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value
             };

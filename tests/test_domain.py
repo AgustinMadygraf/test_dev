@@ -1,41 +1,41 @@
 import pytest
-from src.domain.value_objects import Email, NumeroExpediente
-from src.domain.entities.expediente import Expediente, ExpedienteStatus
-from src.domain.exceptions import InvalidValueError, InvalidStateTransitionError
+from src.domain.objetos_valor import CorreoElectronico, NumeroExpediente
+from src.domain.entidades.expediente import Expediente, EstadoExpediente
+from src.domain.excepciones import ErrorValorInvalido, ErrorTransicionEstadoInvalida
 
 def test_email_valido():
-    email = Email("test@example.com")
+    email = CorreoElectronico("test@example.com")
     assert str(email) == "test@example.com"
 
 def test_email_invalido():
-    with pytest.raises(InvalidValueError):
-        Email("invalido")
+    with pytest.raises(ErrorValorInvalido):
+        CorreoElectronico("invalido")
 
 def test_numero_expediente_valido():
     num = NumeroExpediente("EXP-123")
     assert str(num) == "EXP-123"
 
 def test_numero_expediente_invalido():
-    with pytest.raises(InvalidValueError):
+    with pytest.raises(ErrorValorInvalido):
         NumeroExpediente("EXP 123!")
 
 def test_crear_expediente_borrador():
     exp = Expediente.crear_nuevo("123", "Extracto", 1)
-    assert exp.estado == ExpedienteStatus.BORRADOR
+    assert exp.estado == EstadoExpediente.BORRADOR
 
 def test_transicion_estado_valida():
     exp = Expediente.crear_nuevo("123", "Extracto", 1)
-    exp.cambiar_estado(ExpedienteStatus.EN_CURSO)
-    assert exp.estado == ExpedienteStatus.EN_CURSO
+    exp.cambiar_estado(EstadoExpediente.EN_CURSO)
+    assert exp.estado == EstadoExpediente.EN_CURSO
 
 def test_transicion_estado_invalida_archivado():
     exp = Expediente.crear_nuevo("123", "Extracto", 1)
-    exp.cambiar_estado(ExpedienteStatus.ARCHIVADO)
-    with pytest.raises(InvalidStateTransitionError):
-        exp.cambiar_estado(ExpedienteStatus.EN_CURSO)
+    exp.cambiar_estado(EstadoExpediente.ARCHIVADO)
+    with pytest.raises(ErrorTransicionEstadoInvalida):
+        exp.cambiar_estado(EstadoExpediente.EN_CURSO)
 
 def test_transicion_estado_prohibida_finalizado_a_borrador():
     exp = Expediente.crear_nuevo("123", "Extracto", 1)
-    exp.cambiar_estado(ExpedienteStatus.FINALIZADO)
-    with pytest.raises(InvalidStateTransitionError):
-        exp.cambiar_estado(ExpedienteStatus.BORRADOR)
+    exp.cambiar_estado(EstadoExpediente.FINALIZADO)
+    with pytest.raises(ErrorTransicionEstadoInvalida):
+        exp.cambiar_estado(EstadoExpediente.BORRADOR)

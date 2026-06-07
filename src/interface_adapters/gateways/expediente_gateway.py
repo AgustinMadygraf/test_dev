@@ -3,8 +3,8 @@ Path: src/interface_adapters/gateways/expediente_gateway.py
 """
 
 from typing import List, Optional, Any, Dict, Protocol
-from src.domain.entities.expediente import Expediente
-from src.domain.services.repositories import IExpedienteRepository
+from src.domain.entidades.expediente import Expediente
+from src.domain.servicios.repositorios import IRepositorioExpediente
 
 class DatabaseAdapter(Protocol):
     def save(self, data: Dict[str, Any]) -> Dict[str, Any]: ...
@@ -12,7 +12,7 @@ class DatabaseAdapter(Protocol):
     def find_by_id(self, id: int) -> Optional[Dict[str, Any]]: ...
     def find_all(self) -> List[Dict[str, Any]]: ...
 
-class ExpedienteGateway(IExpedienteRepository):
+class ExpedienteGateway(IRepositorioExpediente):
     def __init__(self, db_adapter: DatabaseAdapter):
         self.db = db_adapter
 
@@ -20,7 +20,7 @@ class ExpedienteGateway(IExpedienteRepository):
         data: Dict[str, Any] = {
             "numero": expediente.numero,
             "extracto": expediente.extracto,
-            "owner_id": expediente.owner_id,
+            "id_propietario": expediente.id_propietario,
             "descripcion": expediente.descripcion
         }
         if expediente.id is not None:
@@ -46,6 +46,6 @@ class ExpedienteGateway(IExpedienteRepository):
             id=data.get("id"),
             numero=data["numero"],
             extracto=data["extracto"],
-            owner_id=data["owner_id"],
+            id_propietario=data["id_propietario"],
             descripcion=data.get("descripcion")
         )

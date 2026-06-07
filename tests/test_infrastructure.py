@@ -4,73 +4,73 @@ Path: tests/test_infrastructure.py
 
 import pytest
 from unittest.mock import MagicMock
-from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUserAdapter
+from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
 from src.infrastructure.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
-from src.domain.entities.expediente import Expediente
-from src.infrastructure.sqlalchemy.models import ExpedienteORM, UserORM
-from src.domain.entities.user import User
+from src.domain.entidades.expediente import Expediente
+from src.infrastructure.sqlalchemy.models import ExpedienteORM, UsuarioORM
+from src.domain.entidades.usuario import Usuario
 
-def test_database_adapter_get_all(mock_session):
+def test_database_adapter_buscar_todos(mock_session):
     adapter = SQLAlchemyDatabaseAdapter(mock_session)
     mock_session.query.return_value.all.return_value = []
     
-    results = adapter.get_all()
+    results = adapter.buscar_todos()
     assert results == []
     mock_session.query.assert_called()
 
-def test_database_adapter_get_by_numero(mock_session):
+def test_database_adapter_buscar_por_numero(mock_session):
     adapter = SQLAlchemyDatabaseAdapter(mock_session)
     mock_session.query.return_value.filter_by.return_value.first.return_value = None
     
-    result = adapter.get_by_numero("123")
+    result = adapter.buscar_por_numero("123")
     assert result is None
 
-def test_database_adapter_save_new(mock_session):
+def test_database_adapter_guardar_new(mock_session):
     adapter = SQLAlchemyDatabaseAdapter(mock_session)
-    exp = Expediente(numero="2023-X", extracto="Test", owner_id=1)
+    exp = Expediente(numero="2023-X", extracto="Test", id_propietario=1)
     
     # Simular el refresco de la base de datos asignando un ID
     def mock_refresh(obj):
         obj.id = 1
     mock_session.refresh.side_effect = mock_refresh
 
-    result = adapter.save(exp)
+    result = adapter.guardar(exp)
     assert result.id == 1
     mock_session.add.assert_called_once()
 
-def test_database_adapter_save_update(mock_session):
+def test_database_adapter_guardar_update(mock_session):
     adapter = SQLAlchemyDatabaseAdapter(mock_session)
     # Mockeamos session.get para devolver un objeto ORM existente
-    mock_orm = ExpedienteORM(id=1, numero="OLD", extracto="Old", owner_id=1)
+    mock_orm = ExpedienteORM(id=1, numero="OLD", extracto="Old", id_propietario=1)
     mock_session.get.return_value = mock_orm
     
-    exp = Expediente(id=1, numero="NEW", extracto="New", owner_id=1)
-    result = adapter.save(exp)
+    exp = Expediente(id=1, numero="NEW", extracto="New", id_propietario=1)
+    result = adapter.guardar(exp)
     
     assert str(result.numero) == "NEW"
     mock_session.flush.assert_called_once()
 
-def test_database_adapter_get_by_id(mock_session):
+def test_database_adapter_buscar_por_id(mock_session):
     adapter = SQLAlchemyDatabaseAdapter(mock_session)
     mock_session.get.return_value = None
-    assert adapter.get_by_id(1) is None
+    assert adapter.buscar_por_id(1) is None
 
-def test_user_adapter_get_by_email(mock_session):
-    adapter = SQLAlchemyUserAdapter(mock_session)
+def test_user_adapter_buscar_por_correo(mock_session):
+    adapter = SQLAlchemyUsuarioAdapter(mock_session)
     mock_session.query.return_value.filter_by.return_value.first.return_value = None
     
-    result = adapter.get_by_email("test@test.com")
+    result = adapter.buscar_por_correo("test@test.com")
     assert result is None
 
-def test_user_adapter_save_new(mock_session):
-    adapter = SQLAlchemyUserAdapter(mock_session)
-    user = User(email="test@test.com", hashed_password="pw")
+def test_user_adapter_guardar_new(mock_session):
+    adapter = SQLAlchemyUsuarioAdapter(mock_session)
+    user = Usuario(correo="test@test.com", contrasena_hash="pw")
     
     def mock_refresh(obj):
         obj.id = 1
     mock_session.refresh.side_effect = mock_refresh
     
-    result = adapter.save(user)
+    result = adapter.guardar(user)
     assert result.id == 1
     mock_session.add.assert_called_once()
 
@@ -78,7 +78,7 @@ def test_uow_automatic_commit(mock_session):
     session_factory = MagicMock(return_value=mock_session)
     uow = SQLAlchemyUnitOfWork(session_factory)
     
-    # Al salir del bloque sin excepción, IUnitOfWork llama a commit()
+    # Al salir del bloque sin excepción, IUnidadDeTrabajo llama a commit()
     with uow:
         pass
     mock_session.commit.assert_called_once()

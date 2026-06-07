@@ -6,21 +6,21 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 from jose import jwt
 from passlib.context import CryptContext
-from src.domain.services.security import ISecurityService
+from src.domain.servicios.seguridad import IServicioSeguridad
 from src.infrastructure.settings.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+def verificar_contrasena(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
-def get_password_hash(password: str) -> str:
+def obtener_hash_contrasena(password: str) -> str:
     return pwd_context.hash(password)
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
+def crear_token_acceso(datos: dict, delta_expiracion: Optional[timedelta] = None) -> str:
+    to_encode = datos.copy()
+    if delta_expiracion:
+        expire = datetime.now(timezone.utc) + delta_expiracion
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     
@@ -35,12 +35,12 @@ def decode_access_token(token: str) -> Optional[dict]:
     except Exception:
         return None
 
-class JWTSecurityService(ISecurityService):
-    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        return verify_password(plain_password, hashed_password)
+class JWTSecurityService(IServicioSeguridad):
+    def verificar_contrasena(self, plain_password: str, hashed_password: str) -> bool:
+        return verificar_contrasena(plain_password, hashed_password)
 
-    def get_password_hash(self, password: str) -> str:
-        return get_password_hash(password)
+    def obtener_hash_contrasena(self, password: str) -> str:
+        return obtener_hash_contrasena(password)
 
-    def create_access_token(self, data: dict, expires_delta: Optional[timedelta] = None) -> str:
-        return create_access_token(data, expires_delta)
+    def crear_token_acceso(self, datos: dict, delta_expiracion: Optional[timedelta] = None) -> str:
+        return crear_token_acceso(datos, delta_expiracion)

@@ -11,7 +11,7 @@ from src.interface_adapters.presenters.expediente_presenter import ExpedientePre
 class ExpedienteCreateDTO:
     numero: str
     extracto: str
-    owner_id: int
+    id_propietario: int
     descripcion: Optional[str] = None
 
 class ExpedienteController:
@@ -25,7 +25,7 @@ class ExpedienteController:
         expediente = self.use_cases.crear_expediente(
             numero=dto.numero,
             extracto=dto.extracto,
-            owner_id=dto.owner_id,
+            id_propietario=dto.id_propietario,
             descripcion=dto.descripcion
         )
         
