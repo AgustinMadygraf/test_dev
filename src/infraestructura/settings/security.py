@@ -1,11 +1,11 @@
-# Path: src/infrastructure/settings/security.py
+# Path: src/infraestructura/settings/security.py
 
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 from jose import jwt
 from passlib.context import CryptContext
 from src.aplicacion.servicios.seguridad import IServicioSeguridad
-from src.infrastructure.settings.config import settings
+from src.infraestructura.settings.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

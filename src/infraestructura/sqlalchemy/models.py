@@ -1,5 +1,5 @@
 """
-Path: src/infrastructure/sqlalchemy/models.py
+Path: src/infraestructura/sqlalchemy/models.py
 """
 
 from sqlalchemy import Column, Integer, String, DateTime, Enum, Text, Boolean

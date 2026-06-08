@@ -1,10 +1,10 @@
 """
-Path: src/infrastructure/fastapi/auth_schemas.py
+Path: src/infraestructura/fastapi/auth_schemas.py
 """
 
 from pydantic import BaseModel
 from typing import Optional
-from src.infrastructure.fastapi.schemas import CorreoElectronicoAnnotated
+from src.infraestructura.fastapi.schemas import CorreoElectronicoAnnotated
 
 class Token(BaseModel):
     access_token: str

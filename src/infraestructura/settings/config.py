@@ -1,5 +1,5 @@
 """
-Path: src/infrastructure/settings/config.py
+Path: src/infraestructura/settings/config.py
 """
 
 import os

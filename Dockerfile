@@ -24,4 +24,4 @@ RUN mkdir -p /app/data
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python -m src.infrastructure.sqlalchemy.seed && uvicorn src.infrastructure.fastapi.app:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "python -m src.infraestructura.sqlalchemy.seed && uvicorn src.infraestructura.fastapi.app:app --host 0.0.0.0 --port 8000"]

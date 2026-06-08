@@ -15,7 +15,7 @@ Se ha definido un umbral estricto del **85%**. Si la cobertura total es inferior
 ## Estructura de Pruebas
 - **Unitarias:** Localizadas en `tests/test_use_cases.py`, prueban la lógica pura de negocio.
 - **Integración:** Localizadas en `tests/test_api.py`, prueban los endpoints usando `TestClient`.
-- **Infraestructura:** Localizadas en `tests/test_infrastructure.py`, prueban los adaptadores de base de datos y el Unit of Work.
+- **Infraestructura:** Localizadas en `tests/test_infraestructura.py`, prueban los adaptadores de base de datos y el Unit of Work.
 
 ## Hooks de Git
 Se recomienda enlazar el script de pre-push para automatizar la revisión antes de subir código:

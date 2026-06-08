@@ -1,5 +1,5 @@
 """
-Path: src/infrastructure/fastapi/app.py
+Path: src/infraestructura/fastapi/app.py
 """
 
 import os
@@ -8,11 +8,11 @@ from fastapi import FastAPI, Response, Request, status
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from src.infrastructure.sqlalchemy.database import init_db
-from src.infrastructure.fastapi.routes import router as expediente_router
-from src.infrastructure.fastapi.auth_routes import router as auth_router
-from src.infrastructure.settings.config import settings
-from src.infrastructure.settings.logger import get_logger
+from src.infraestructura.sqlalchemy.database import init_db
+from src.infraestructura.fastapi.routes import router as expediente_router
+from src.infraestructura.fastapi.auth_routes import router as auth_router
+from src.infraestructura.settings.config import settings
+from src.infraestructura.settings.logger import get_logger
 
 logger = get_logger(__name__, settings.LOG_LEVEL)
 
@@ -62,7 +62,7 @@ async def health_check() -> dict[str, str]:
 async def read_root():
     if os.path.exists(STATIC_FILE):
         return FileResponse(STATIC_FILE)
-    return {"message": "API is running. Frontend file not found at src/infrastructure/fastapi/static/index.html"}
+    return {"message": "API is running. Frontend file not found at src/infraestructura/fastapi/static/index.html"}
 
 @app.get("/login", tags=["System"])
 async def read_login():

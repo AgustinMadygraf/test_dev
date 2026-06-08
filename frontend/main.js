@@ -1,8 +1,8 @@
 /* Path: frontend/main.js */
-import { expedienteService } from './infrastructure/expedienteService.js';
-import { authService } from './infrastructure/authService.js';
+import { expedienteService } from './infraestructura/expedienteService.js';
+import { authService } from './infraestructura/authService.js';
 import { ExpedienteRenderer } from './ui/expedienteRenderer.js';
-import { Expediente } from './domain/expediente.js';
+import { Expediente } from './dominio/expediente.js';
 import { UIUtils } from './ui/uiUtils.js';
 
 class ExpedienteApp {

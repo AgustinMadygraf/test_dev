@@ -1,4 +1,4 @@
-/* Path: frontend/infrastructure/expedienteService.js */
+/* Path: frontend/infraestructura/expedienteService.js */
 import { apiClient } from './apiClient.js';
 export class ExpedienteService {
     constructor() { this.endpoint = '/expedientes/'; }

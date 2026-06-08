@@ -1,6 +1,6 @@
 from src.dominio.objetos_valor import NumeroExpediente, CorreoElectronico
 """
-Path: src/infrastructure/fastapi/schemas.py
+Path: src/infraestructura/fastapi/schemas.py
 """
 
 from pydantic import BaseModel, ConfigDict, PlainSerializer, BeforeValidator

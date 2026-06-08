@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from src.infrastructure.fastapi.schemas import UsuarioCreate, UsuarioRead
-from src.infrastructure.fastapi.auth_schemas import Token
-from src.infrastructure.fastapi.dependencies import get_auth_use_cases
+from src.infraestructura.fastapi.schemas import UsuarioCreate, UsuarioRead
+from src.infraestructura.fastapi.auth_schemas import Token
+from src.infraestructura.fastapi.dependencies import get_auth_use_cases
 from src.aplicacion.auth import CasosUsoAutenticacion
 from src.dominio.objetos_valor import CorreoElectronico
 

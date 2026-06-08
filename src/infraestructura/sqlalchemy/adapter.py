@@ -2,7 +2,7 @@ from typing import List, Optional, Any, cast
 from src.dominio.entidades.expediente import Expediente
 from src.dominio.entidades.usuario import Usuario
 from src.dominio.servicios.repositorios import IRepositorioExpediente, IRepositorioUsuario
-from src.infrastructure.sqlalchemy.models import ExpedienteORM, UsuarioORM
+from src.infraestructura.sqlalchemy.models import ExpedienteORM, UsuarioORM
 from sqlalchemy.orm import Session
 
 class SQLAlchemyDatabaseAdapter(IRepositorioExpediente):

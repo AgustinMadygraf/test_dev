@@ -30,6 +30,6 @@ fi
 
 # Ejecución de uvicorn apuntando a la instancia de la app
 # Inicializar base de datos y seeding
-python -m src.infrastructure.sqlalchemy.seed
+python -m src.infraestructura.sqlalchemy.seed
 
-uvicorn src.infrastructure.fastapi.app:app --reload --host 127.0.0.1 --port $PORT
+uvicorn src.infraestructura.fastapi.app:app --reload --host 127.0.0.1 --port $PORT

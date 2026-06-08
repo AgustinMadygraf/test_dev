@@ -1,4 +1,4 @@
-/* Path: frontend/infrastructure/apiClient.js */
+/* Path: frontend/infraestructura/apiClient.js */
 export class ApiClient {
     constructor(baseUrl = '') {
         this.baseUrl = baseUrl;

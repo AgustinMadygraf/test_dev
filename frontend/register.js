@@ -1,5 +1,5 @@
 /* Path: frontend/register.js */
-import { authService } from './infrastructure/authService.js';
+import { authService } from './infraestructura/authService.js';
 import { UIUtils } from './ui/uiUtils.js';
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,12 +1,12 @@
 """
-Path: src/infrastructure/sqlalchemy/seed.py
+Path: src/infraestructura/sqlalchemy/seed.py
 """
 
 from passlib.context import CryptContext
-from src.infrastructure.settings.config import settings
-from src.infrastructure.settings.logger import get_logger
-from src.infrastructure.sqlalchemy.database import init_db, SessionLocal
-from src.infrastructure.sqlalchemy.models import UsuarioORM as User, ExpedienteORM as Expediente
+from src.infraestructura.settings.config import settings
+from src.infraestructura.settings.logger import get_logger
+from src.infraestructura.sqlalchemy.database import init_db, SessionLocal
+from src.infraestructura.sqlalchemy.models import UsuarioORM as User, ExpedienteORM as Expediente
 
 logger = get_logger("db_seed", settings.LOG_LEVEL)
 

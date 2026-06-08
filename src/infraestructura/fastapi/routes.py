@@ -1,11 +1,11 @@
 """
-Path: src/infrastructure/fastapi/routes.py
+Path: src/infraestructura/fastapi/routes.py
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
-from src.infrastructure.fastapi.schemas import ExpedienteCreate, ExpedienteRead
-from src.infrastructure.fastapi.dependencies import get_expediente_use_cases, get_current_user
+from src.infraestructura.fastapi.schemas import ExpedienteCreate, ExpedienteRead
+from src.infraestructura.fastapi.dependencies import get_expediente_use_cases, get_current_user
 from src.aplicacion.expediente import CasosUsoExpediente
 from src.dominio.entidades.usuario import Usuario
 

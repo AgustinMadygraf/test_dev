@@ -1,4 +1,4 @@
-/* Path: frontend/infrastructure/authService.js */
+/* Path: frontend/infraestructura/authService.js */
 import { apiClient } from './apiClient.js';
 export class AuthService {
     async login(username, password) {

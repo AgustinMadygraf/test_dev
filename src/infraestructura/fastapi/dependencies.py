@@ -1,16 +1,16 @@
-# Path: src/infrastructure/fastapi/dependencies.py
+# Path: src/infraestructura/fastapi/dependencies.py
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 import hashlib
 import hmac
-from src.infrastructure.sqlalchemy.database import SessionLocal
-from src.infrastructure.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
+from src.infraestructura.sqlalchemy.database import SessionLocal
+from src.infraestructura.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
 from src.aplicacion.servicios.unidad_de_trabajo import UnidadDeTrabajo
 from src.aplicacion.expediente import CasosUsoExpediente
 from src.aplicacion.auth import CasosUsoAutenticacion
 from src.aplicacion.servicios.seguridad import IServicioSeguridad
-from src.infrastructure.settings.security import decode_access_token, JWTSecurityService
+from src.infraestructura.settings.security import decode_access_token, JWTSecurityService
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")

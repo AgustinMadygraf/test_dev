@@ -1,7 +1,7 @@
 from typing import Optional
 from sqlalchemy.orm import sessionmaker, Session
 from src.aplicacion.servicios.unidad_de_trabajo import UnidadDeTrabajo
-from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
+from src.infraestructura.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
 
 class SQLAlchemyUnitOfWork(UnidadDeTrabajo):
     def __init__(self, session_factory: sessionmaker):

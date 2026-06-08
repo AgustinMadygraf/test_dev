@@ -1,13 +1,13 @@
 """
-Path: tests/test_infrastructure.py
+Path: tests/test_infraestructura.py
 """
 
 import pytest
 from unittest.mock import MagicMock
-from src.infrastructure.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
-from src.infrastructure.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
+from src.infraestructura.sqlalchemy.adapter import SQLAlchemyDatabaseAdapter, SQLAlchemyUsuarioAdapter
+from src.infraestructura.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
 from src.dominio.entidades.expediente import Expediente
-from src.infrastructure.sqlalchemy.models import ExpedienteORM, UsuarioORM
+from src.infraestructura.sqlalchemy.models import ExpedienteORM, UsuarioORM
 from src.dominio.entidades.usuario import Usuario
 
 def test_database_adapter_buscar_todos(mock_session):

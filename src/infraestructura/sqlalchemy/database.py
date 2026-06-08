@@ -1,13 +1,13 @@
 """
-Path: src/infrastructure/sqlalchemy/database.py
+Path: src/infraestructura/sqlalchemy/database.py
 """
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
-from src.infrastructure.settings.config import settings
-from src.infrastructure.sqlalchemy.models import Base
-from src.infrastructure.settings.logger import get_logger
+from src.infraestructura.settings.config import settings
+from src.infraestructura.sqlalchemy.models import Base
+from src.infraestructura.settings.logger import get_logger
 
 logger = get_logger(__name__, settings.LOG_LEVEL)
 
