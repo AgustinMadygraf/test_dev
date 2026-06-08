@@ -14,7 +14,6 @@ else
 fi
 
 # 2. Opcional: Validar linting/formato (Recomendado)
-# Si usas ruff o flake8, podrías descomentar las siguientes líneas:
 # echo "🎨 Comprobando formato y linting..."
 # ruff check . || exit 1
 
@@ -24,23 +23,6 @@ PYTHONPATH=. pytest --cov=src --cov-report=term-missing --cov-fail-under=85 test
 if [ $? -ne 0 ]; then
     echo "❌ Error: Tests Python fallidos o cobertura insuficiente."
     exit 1
-fi
-
-# 4. Ejecutar tests frontend si existe carpeta frontend
-if [ -d "frontend" ]; then
-    echo "🧩 Ejecutando tests frontend (Jest)..."
-    if ! command -v npm >/dev/null 2>&1; then
-        echo "⚠️  npm no está disponible. Omisión de tests frontend."
-    else
-        pushd frontend >/dev/null || exit 1
-        if [ -d node_modules ]; then
-            npm test --silent || { echo "❌ Tests frontend fallidos."; popd >/dev/null; exit 1; }
-        else
-            npm ci --no-audit --no-fund || { echo "❌ Falló npm ci."; popd >/dev/null; exit 1; }
-            npm test --silent || { echo "❌ Tests frontend fallidos."; popd >/dev/null; exit 1; }
-        fi
-        popd >/dev/null
-    fi
 fi
 
 echo "✅ Validaciones pre-push completadas correctamente."

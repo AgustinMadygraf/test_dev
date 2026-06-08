@@ -1,29 +1,30 @@
 # Sistema de Gestión de Expedientes
 
-Este proyecto es una aplicación web robusta para la gestión de expedientes, desarrollada siguiendo principios de **Arquitectura Limpia (Clean Architecture)** y **SOLID**. Permite a los usuarios registrarse, autenticarse de forma segura y gestionar sus propios expedientes de manera aislada.
+Este proyecto es una aplicación web para la gestión de expedientes. Te permite registrarte, loguearte de forma segura y gestionar tus propios expedientes de manera aislada.
 
-## 🚀 Tecnologías Utilizadas
+## 🚀 Tecnologías que usamos
 
-- **Backend:** [FastAPI](https://fastapi.tiangolo.com/) (Python 3.12+)
-- **Base de Datos:** MySQL / SQLite (vía SQLAlchemy ORM)
-- **Seguridad:** Autenticación JWT con `passlib` (bcrypt) y `python-jose`.
+- **Backend:** FastAPI (Python 3.12+)
+- **Base de Datos:** SQLite (vía SQLAlchemy ORM)
+- **Seguridad:** Autenticación JWT.
 - **Frontend:** HTML5, CSS3 (Bootstrap 5) y JavaScript Vanilla.
-- **Testing:** Pytest con `pytest-cov` para reportes de cobertura.
+- **Testing:** Pytest con pytest-cov.
 
-## 📚 Documentación Detallada
+## 📚 Documentación
 
-Para facilitar la navegación, la documentación se ha dividido según el perfil de interés:
+Acá tenés toda la info para entender y manejar el proyecto:
 
-1.  **Guía de Instalación para Desarrolladores**: Todo lo necesario para preparar el entorno de desarrollo y levantar el servidor.
-2.  **Manual de Usuario Final**: Explicación paso a paso de cómo registrarse, loguearse y gestionar expedientes.
-3.  **Guía de Testing y Calidad**: Detalles sobre la ejecución de pruebas, umbrales de cobertura y hooks de Git.
+1.  **Guía de Instalación**: Ver docs/INSTALLING.md para configurar el entorno.
+2.  **Manual de Usuario**: Ver docs/USER_GUIDE.md para aprender a usar el sistema.
+3.  **Guía de Testing**: Ver docs/TESTING.md para detalles sobre cómo corremos las pruebas y mantenemos la calidad.
+4.  **Documentación de API**: Una vez corriendo el servidor, entrá a http://localhost:8000/docs para ver la especificación OpenAPI interactiva.
 
 ## ⚡ Inicio Rápido
 
-Si ya tienes el entorno configurado, simplemente ejecuta:
-```bash
+### Desarrollo Local (sin Docker)
+Prepará tu entorno virtual y ejecutá:
 ./run.sh
-```
 
----
-*Desarrollado como parte de una evaluación técnica de Ingeniería de Software.*
+### Entorno Contenedorizado (Docker)
+Asegurate de copiar .env.example a .env y configurar tus variables antes de ejecutar:
+docker compose up -d --build
