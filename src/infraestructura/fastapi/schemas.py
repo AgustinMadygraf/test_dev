@@ -1,12 +1,8 @@
-from src.dominio.objetos_valor import NumeroExpediente, CorreoElectronico
-"""
-Path: src/infraestructura/fastapi/schemas.py
-"""
-
 from pydantic import BaseModel, ConfigDict, PlainSerializer, BeforeValidator
 from typing import Annotated, Optional, Any
 from datetime import datetime
 from src.dominio.entidades.expediente import EstadoExpediente
+from src.dominio.objetos_valor import NumeroExpediente, CorreoElectronico
 
 def validate_numero(value: Any) -> NumeroExpediente:
     if isinstance(value, NumeroExpediente):
@@ -24,6 +20,10 @@ CorreoElectronicoAnnotated = Annotated[CorreoElectronico, BeforeValidator(valida
 class ExpedienteCreate(BaseModel):
     numero: NumeroAnnotated
     extracto: str
+    descripcion: Optional[str] = None
+
+class ExpedienteUpdate(BaseModel):
+    extracto: Optional[str] = None
     descripcion: Optional[str] = None
 
 class ExpedienteRead(BaseModel):

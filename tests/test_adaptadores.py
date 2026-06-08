@@ -1,5 +1,3 @@
-# Path: tests/test_adaptadores.py
-
 from datetime import datetime, timezone
 from unittest.mock import MagicMock
 
@@ -92,7 +90,6 @@ def test_expediente_controller_obtener_no_encontrado():
 
 
 def test_expediente_gateway_guardar_y_buscar_todos_filtra_por_propietario():
-    # Este test no necesita cambios de nombres por ahora ya que prueba el gateway
     db_adapter = MagicMock()
     now = datetime(2026, 1, 1, 12, 0, tzinfo=timezone.utc)
     db_adapter.save.return_value = {
@@ -118,7 +115,11 @@ def test_expediente_gateway_guardar_y_buscar_todos_filtra_por_propietario():
         }
     ]
     
-    gateway = PasarelaExpediente(db_adapter)
+    class MockPasarela(PasarelaExpediente):
+        def actualizar(self, exp): pass
+        def eliminar(self, exp_id): pass
+    
+    gateway = MockPasarela(db_adapter)
     expediente = Expediente(numero=NumeroExpediente("123"), extracto="Test", id_propietario=1)
     
     gateway.guardar(expediente)

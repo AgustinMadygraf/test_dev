@@ -1,5 +1,3 @@
-# Path: src/dominio/servicios/repositorios.py
-
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from src.dominio.entidades.usuario import Usuario
@@ -21,6 +19,14 @@ class IRepositorioUsuario(ABC):
 class IRepositorioExpediente(ABC):
     @abstractmethod
     def guardar(self, expediente: Expediente) -> Expediente:
+        pass
+
+    @abstractmethod
+    def actualizar(self, expediente: Expediente) -> Expediente:
+        pass
+
+    @abstractmethod
+    def eliminar(self, expediente_id: int) -> None:
         pass
 
     @abstractmethod

@@ -1,5 +1,3 @@
-# Path: src/aplicacion/expediente.py
-
 from typing import List, Optional
 from src.dominio.entidades.expediente import Expediente
 from src.aplicacion.servicios.unidad_de_trabajo import UnidadDeTrabajo
@@ -28,6 +26,31 @@ class CasosUsoExpediente:
         with self.uow:
             return self.uow.expedientes.buscar_todos(id_propietario=id_propietario)
 
-    def obtener_expediente(self, expediente_id: int) -> Optional[Expediente]:
+    def obtener_expediente(self, id_expediente: int) -> Optional[Expediente]:
         with self.uow:
-            return self.uow.expedientes.buscar_por_id(expediente_id)
+            return self.uow.expedientes.buscar_por_id(id_expediente)
+
+    def actualizar_expediente(self, id_expediente: int, id_propietario: int, extracto: Optional[str] = None, descripcion: Optional[str] = None) -> Expediente:
+        with self.uow:
+            expediente = self.uow.expedientes.buscar_por_id(id_expediente)
+            if not expediente:
+                raise ErrorViolacionReglaNegocio("Expediente no encontrado.")
+            if expediente.id_propietario != id_propietario:
+                raise ErrorViolacionReglaNegocio("No tiene permisos para modificar este expediente.")
+            
+            if extracto:
+                expediente.extracto = extracto
+            if descripcion:
+                expediente.descripcion = descripcion
+                
+            return self.uow.expedientes.actualizar(expediente)
+
+    def eliminar_expediente(self, id_expediente: int, id_propietario: int) -> None:
+        with self.uow:
+            expediente = self.uow.expedientes.buscar_por_id(id_expediente)
+            if not expediente:
+                raise ErrorViolacionReglaNegocio("Expediente no encontrado.")
+            if expediente.id_propietario != id_propietario:
+                raise ErrorViolacionReglaNegocio("No tiene permisos para eliminar este expediente.")
+            
+            self.uow.expedientes.eliminar(id_expediente)

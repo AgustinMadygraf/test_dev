@@ -10,18 +10,6 @@ class SQLAlchemyDatabaseAdapter(IRepositorioExpediente):
         self.session = session
 
     def guardar(self, expediente: Expediente) -> Expediente:
-        if expediente.id:
-            obj = self.session.get(ExpedienteORM, expediente.id)
-            if obj:
-                orm_obj = cast(Any, obj)
-                orm_obj.numero = str(expediente.numero)
-                orm_obj.extracto = expediente.extracto
-                orm_obj.descripcion = expediente.descripcion
-                orm_obj.estado = expediente.estado
-                orm_obj.id_propietario = expediente.id_propietario
-                self.session.flush()
-                return self._to_entity(obj)
-        
         new_obj = ExpedienteORM(
             numero=str(expediente.numero),
             extracto=expediente.extracto,
@@ -33,6 +21,26 @@ class SQLAlchemyDatabaseAdapter(IRepositorioExpediente):
         self.session.flush()
         self.session.refresh(new_obj)
         return self._to_entity(new_obj)
+
+    def actualizar(self, expediente: Expediente) -> Expediente:
+        obj = self.session.get(ExpedienteORM, expediente.id)
+        if obj:
+            obj.numero = str(expediente.numero)
+            obj.extracto = expediente.extracto
+            obj.descripcion = expediente.descripcion
+            obj.estado = expediente.estado
+            obj.id_propietario = expediente.id_propietario
+            self.session.flush()
+            return self._to_entity(obj)
+        raise ValueError("Expediente no encontrado")
+
+    def eliminar(self, expediente_id: int) -> None:
+        obj = self.session.get(ExpedienteORM, expediente_id)
+        if obj:
+            self.session.delete(obj)
+            self.session.flush()
+        else:
+            raise ValueError("Expediente no encontrado")
 
     def buscar_por_numero(self, numero: str) -> Optional[Expediente]:
         obj = self.session.query(ExpedienteORM).filter_by(numero=numero).first()
@@ -62,6 +70,8 @@ class SQLAlchemyDatabaseAdapter(IRepositorioExpediente):
         )
 
 class SQLAlchemyUsuarioAdapter(IRepositorioUsuario):
+    # ... (omitido por brevedad, no cambia)
+
     def __init__(self, session: Session):
         self.session = session
 
@@ -94,14 +104,15 @@ class SQLAlchemyUsuarioAdapter(IRepositorioUsuario):
         obj = self.session.query(UsuarioORM).filter_by(correo=correo).first()
         return self._to_entity(obj) if obj else None
 
-    def buscar_por_id(self, usuario_id: int) -> Optional[Usuario]:
-        obj = self.session.get(UsuarioORM, usuario_id)
+    def buscar_por_id(self, id_usuario: int) -> Optional[Usuario]:
+        obj = self.session.get(UsuarioORM, id_usuario)
         return self._to_entity(obj) if obj else None
 
     def _to_entity(self, orm: UsuarioORM) -> Usuario:
+        from src.dominio.objetos_valor import CorreoElectronico
         return Usuario(
             id=cast(Any, orm.id),
-            correo=cast(Any, orm.correo),
+            correo=CorreoElectronico(cast(Any, orm.correo)),
             contrasena_hash=cast(Any, orm.contrasena_hash),
             nombre_completo=cast(Any, orm.nombre_completo),
             es_activo=cast(Any, orm.es_activo),
