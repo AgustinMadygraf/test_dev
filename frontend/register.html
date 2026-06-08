@@ -56,61 +56,7 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const password = document.getElementById('password');
-            const icon = this.querySelector('i');
-            if (password.type === 'password') {
-                password.type = 'text';
-                icon.classList.replace('bi-eye', 'bi-eye-slash');
-            } else {
-                password.type = 'password';
-                icon.classList.replace('bi-eye-slash', 'bi-eye');
-            }
-        });
-
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('registerBtn');
-            const spinner = btn.querySelector('.spinner-border');
-            const text = btn.querySelector('.btn-text');
-            const alertContainer = document.getElementById('alertContainer');
-
-            alertContainer.innerHTML = '';
-            btn.disabled = true;
-            if (spinner) spinner.classList.remove('d-none');
-            if (text) text.classList.add('opacity-50');
-
-            const payload = {
-                nombre_completo: document.getElementById('nombre_completo').value || null,
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value
-            };
-
-            try {
-                const response = await fetch('/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok) {
-                    alertContainer.innerHTML = '<div class="alert alert-success small py-2">Usuario creado con éxito. Redirigiendo...</div>';
-                    setTimeout(() => { window.location.href = '/login'; }, 2000);
-                } else {
-                    const err = await response.json();
-                    alertContainer.innerHTML = '<div class="alert alert-danger small py-2">Error: ' + (err.detail || 'No se pudo crear el usuario') + '</div>';
-                }
-            } catch (error) {
-                alertContainer.innerHTML = '<div class="alert alert-danger small py-2">Error de conexión</div>';
-            } finally {
-                if (alertContainer.innerHTML.includes('alert-danger')) {
-                    btn.disabled = false;
-                    if (spinner) spinner.classList.add('d-none');
-                    if (text) text.classList.remove('opacity-50');
-                }
-            }
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/static/register.js"></script>
 </body>
 </html>
