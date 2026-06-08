@@ -1,6 +1,4 @@
-"""
-Path: tests/test_infraestructura.py
-"""
+# Path: tests/test_infraestuctura.py
 
 import pytest
 from unittest.mock import MagicMock
@@ -9,6 +7,8 @@ from src.infraestructura.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
 from src.dominio.entidades.expediente import Expediente
 from src.infraestructura.sqlalchemy.models import ExpedienteORM, UsuarioORM
 from src.dominio.entidades.usuario import Usuario
+from src.dominio.objetos_valor import CorreoElectronico
+from src.dominio.objetos_valor import NumeroExpediente
 
 def test_database_adapter_buscar_todos(mock_session):
     adapter = SQLAlchemyDatabaseAdapter(mock_session)
@@ -27,7 +27,7 @@ def test_database_adapter_buscar_por_numero(mock_session):
 
 def test_database_adapter_guardar_new(mock_session):
     adapter = SQLAlchemyDatabaseAdapter(mock_session)
-    exp = Expediente(numero="2023-X", extracto="Test", id_propietario=1)
+    exp = Expediente(numero=NumeroExpediente("2023-X"), extracto="Test", id_propietario=1)
     
     # Simular el refresco de la base de datos asignando un ID
     def mock_refresh(obj):
@@ -44,7 +44,7 @@ def test_database_adapter_guardar_update(mock_session):
     mock_orm = ExpedienteORM(id=1, numero="OLD", extracto="Old", id_propietario=1)
     mock_session.get.return_value = mock_orm
     
-    exp = Expediente(id=1, numero="NEW", extracto="New", id_propietario=1)
+    exp = Expediente(id=1, numero=NumeroExpediente("NEW"), extracto="New", id_propietario=1)
     result = adapter.guardar(exp)
     
     assert str(result.numero) == "NEW"
@@ -64,7 +64,7 @@ def test_user_adapter_buscar_por_correo(mock_session):
 
 def test_user_adapter_guardar_new(mock_session):
     adapter = SQLAlchemyUsuarioAdapter(mock_session)
-    user = Usuario(correo="test@test.com", contrasena_hash="pw")
+    user = Usuario(correo=CorreoElectronico("test@test.com"), contrasena_hash="pw")
     
     def mock_refresh(obj):
         obj.id = 1

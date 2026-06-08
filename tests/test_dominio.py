@@ -1,3 +1,5 @@
+# Path: tests/test_dominio.py
+
 import pytest
 from src.dominio.objetos_valor import CorreoElectronico, NumeroExpediente
 from src.dominio.entidades.expediente import Expediente, EstadoExpediente

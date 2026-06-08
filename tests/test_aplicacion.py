@@ -1,8 +1,10 @@
+# Path: tests/test_aplicacion.py
+
 import pytest
 from unittest.mock import MagicMock
 from src.dominio.entidades.expediente import Expediente
 from src.dominio.excepciones import ErrorViolacionReglaNegocio
-from src.dominio.objetos_valor import CorreoElectronico
+from src.dominio.objetos_valor import CorreoElectronico, NumeroExpediente
 
 def test_registrar_usuario_exitoso(auth_use_cases, mock_uow, mock_security, mock_user):
     # Arrange
@@ -52,14 +54,14 @@ def test_iniciar_sesion_usuario_inactivo(auth_use_cases, mock_uow, mock_security
     mock_uow.usuarios.buscar_por_correo.return_value = mock_user
     mock_security.verificar_contrasena.return_value = True
     correo = CorreoElectronico("test@example.com")
-    
+
     with pytest.raises(ErrorViolacionReglaNegocio, match="Usuario inactivo"):
         auth_use_cases.iniciar_sesion(correo, "contrasena123")
 
 def test_crear_expediente_success(expediente_use_cases, mock_uow):
     # Arrange
     mock_uow.expedientes.buscar_por_numero.return_value = None
-    mock_exp = Expediente(id=1, numero="123", extracto="Test", id_propietario=1)
+    mock_exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="Test", id_propietario=1)
     mock_uow.expedientes.guardar.return_value = mock_exp
 
     # Act

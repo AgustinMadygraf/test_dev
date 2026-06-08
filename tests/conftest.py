@@ -1,9 +1,7 @@
-"""
-Path: tests/conftest.py
-"""
+# Path: tests/conftest.py
 
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
 from src.infraestructura.fastapi.app import app
 from src.infraestructura.fastapi.dependencies import get_uow, get_security_service, get_current_user
@@ -12,6 +10,7 @@ from src.aplicacion.servicios.seguridad import IServicioSeguridad
 from src.dominio.servicios.repositorios import IRepositorioUsuario, IRepositorioExpediente
 from src.aplicacion.auth import CasosUsoAutenticacion
 from src.aplicacion.expediente import CasosUsoExpediente
+from src.dominio.objetos_valor import CorreoElectronico
 
 @pytest.fixture
 def mock_uow():
@@ -39,7 +38,7 @@ def mock_user():
     from src.dominio.entidades.usuario import Usuario
     return Usuario(
         id=1,
-        correo="test@example.com",
+        correo=CorreoElectronico("test@example.com"),
         contrasena_hash="hashed_secret",
         nombre_completo="Test Usuario"
     )

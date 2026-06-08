@@ -1,9 +1,7 @@
-"""
-Path: tests/test_api.py
-"""
+# Path: tests/test_api.py
 
-import pytest
 from src.dominio.entidades.expediente import Expediente, EstadoExpediente
+from src.dominio.objetos_valor import NumeroExpediente
 from unittest.mock import MagicMock
 
 def test_read_main(client):
@@ -32,7 +30,7 @@ def test_api_crear_expediente(client, mock_uow):
     # Arrange
     mock_uow.expedientes.buscar_por_numero.return_value = None
     mock_uow.expedientes.guardar.return_value = Expediente(
-        id=1, numero="2023-001", extracto="Test API", id_propietario=1,
+        id=1, numero=NumeroExpediente("2023-001"), extracto="Test API", id_propietario=1,
         estado=EstadoExpediente.BORRADOR
     )
 
@@ -62,7 +60,7 @@ def test_api_listar_expedientes(client, mock_uow):
     assert isinstance(response.json(), list)
 
 def test_api_obtener_expediente_owner(client, mock_uow, mock_user):
-    mock_exp = Expediente(id=1, numero="123", extracto="Ex", id_propietario=mock_user.id)
+    mock_exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="Ex", id_propietario=mock_user.id)
     mock_uow.expedientes.buscar_por_id.return_value = mock_exp
     
     response = client.get("/expedientes/1")
@@ -76,7 +74,7 @@ def test_api_obtener_expediente_not_found(client, mock_uow):
 
 def test_api_obtener_expediente_forbidden(client, mock_uow):
     # Expediente que pertenece a otro usuario (ID 99)
-    mock_exp = Expediente(id=1, numero="123", extracto="Ex", id_propietario=99)
+    mock_exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="Ex", id_propietario=99)
     mock_uow.expedientes.buscar_por_id.return_value = mock_exp
     
     response = client.get("/expedientes/1")

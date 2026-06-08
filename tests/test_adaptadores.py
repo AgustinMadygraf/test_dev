@@ -1,6 +1,4 @@
-"""
-Path: tests/test_adaptadores.py
-"""
+# Path: tests/test_adaptadores.py
 
 from datetime import datetime, timezone
 from unittest.mock import MagicMock
@@ -10,12 +8,12 @@ from src.adaptadores.pasarelas.expediente_gateway import PasarelaExpediente
 from src.adaptadores.presentadores.expediente_presenter import PresentadorExpediente
 from src.aplicacion.expediente import CasosUsoExpediente
 from src.dominio.entidades.expediente import EstadoExpediente, Expediente
-
+from src.dominio.objetos_valor import NumeroExpediente
 
 def test_presenter_formats_expediente():
     presentador = PresentadorExpediente()
     expediente = Expediente(
-        numero="123",
+        numero=NumeroExpediente("123"),
         extracto="Resumen",
         id_propietario=1,
         descripcion=None,
@@ -36,8 +34,8 @@ def test_presenter_formats_expediente():
 
 def test_presenter_formats_list():
     presentador = PresentadorExpediente()
-    exp1 = Expediente(numero="123", extracto="Uno", id_propietario=1)
-    exp2 = Expediente(numero="456", extracto="Dos", id_propietario=1, descripcion="Desc")
+    exp1 = Expediente(numero=NumeroExpediente("123"), extracto="Uno", id_propietario=1)
+    exp2 = Expediente(numero=NumeroExpediente("456"), extracto="Dos", id_propietario=1, descripcion="Desc")
     formateado = presentador.formatear_lista([exp1, exp2])
 
     assert len(formateado) == 2
@@ -49,7 +47,7 @@ def test_expediente_controller_crear():
     casos_uso = MagicMock(spec=CasosUsoExpediente)
     presentador = PresentadorExpediente()
     controlador = ControladorExpediente(casos_uso, presentador)
-    expediente = Expediente(numero="123", extracto="Test", id_propietario=1)
+    expediente = Expediente(numero=NumeroExpediente("123"), extracto="Test", id_propietario=1)
     casos_uso.crear_expediente.return_value = expediente
 
     resultado = controlador.crear({
@@ -72,7 +70,7 @@ def test_expediente_controller_listar():
     casos_uso = MagicMock(spec=CasosUsoExpediente)
     presentador = PresentadorExpediente()
     controlador = ControladorExpediente(casos_uso, presentador)
-    expediente = Expediente(numero="123", extracto="Test", id_propietario=1)
+    expediente = Expediente(numero=NumeroExpediente("123"), extracto="Test", id_propietario=1)
     casos_uso.listar_expedientes.return_value = [expediente]
 
     resultado = controlador.listar()
@@ -121,7 +119,7 @@ def test_expediente_gateway_guardar_y_buscar_todos_filtra_por_propietario():
     ]
     
     gateway = PasarelaExpediente(db_adapter)
-    expediente = Expediente(numero="123", extracto="Test", id_propietario=1)
+    expediente = Expediente(numero=NumeroExpediente("123"), extracto="Test", id_propietario=1)
     
     gateway.guardar(expediente)
     db_adapter.save.assert_called_once()
