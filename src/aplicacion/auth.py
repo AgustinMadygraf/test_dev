@@ -12,29 +12,25 @@ class CasosUsoAutenticacion:
         self.uow = uow
         self.servicio_seguridad = servicio_seguridad
 
-    def registrar(self, correo: str, contrasena: str, nombre_completo: Optional[str] = None) -> Usuario:
+    def registrar(self, correo: CorreoElectronico, contrasena: str, nombre_completo: Optional[str] = None) -> Usuario:
         with self.uow:
-            correo_vo = correo if isinstance(correo, CorreoElectronico) else CorreoElectronico(correo)
-            correo_str = correo_vo.direccion if hasattr(correo_vo, "direccion") else str(correo_vo)
-            usuario_existente = self.uow.usuarios.buscar_por_correo(correo_str)
+            usuario_existente = self.uow.usuarios.buscar_por_correo(correo.direccion)
             if usuario_existente:
                 raise ErrorViolacionReglaNegocio("El correo electrónico ya está registrado")
 
             contrasena_hash = self.servicio_seguridad.obtener_hash_contrasena(contrasena)
 
             nuevo_usuario = Usuario(
-                correo=correo_vo,
+                correo=correo,
                 contrasena_hash=contrasena_hash,
                 nombre_completo=nombre_completo,
             )
             usuario_creado = self.uow.usuarios.guardar(nuevo_usuario)
             return usuario_creado
 
-    def iniciar_sesion(self, correo: str, contrasena: str) -> dict:
+    def iniciar_sesion(self, correo: CorreoElectronico, contrasena: str) -> dict:
         with self.uow:
-            correo_vo = correo if isinstance(correo, CorreoElectronico) else CorreoElectronico(correo)
-            correo_str = correo_vo.direccion if hasattr(correo_vo, "direccion") else str(correo_vo)
-            usuario = self.uow.usuarios.buscar_por_correo(correo_str)
+            usuario = self.uow.usuarios.buscar_por_correo(correo.direccion)
 
             if not usuario or not self.servicio_seguridad.verificar_contrasena(contrasena, usuario.contrasena_hash):
                 raise ErrorViolacionReglaNegocio("Credenciales inválidas")
@@ -42,6 +38,5 @@ class CasosUsoAutenticacion:
             if not usuario.es_activo:
                 raise ErrorViolacionReglaNegocio("Usuario inactivo")
 
-            correo_str = usuario.correo.direccion if hasattr(usuario.correo, "direccion") else usuario.correo
-            token_acceso = self.servicio_seguridad.crear_token_acceso(datos={"sub": str(correo_str)})
+            token_acceso = self.servicio_seguridad.crear_token_acceso(datos={"sub": usuario.correo.direccion})
             return {"access_token": token_acceso, "token_type": "bearer"}

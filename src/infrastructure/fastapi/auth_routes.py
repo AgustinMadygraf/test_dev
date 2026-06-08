@@ -1,13 +1,10 @@
-"""
-Path: src/infrastructure/fastapi/auth_routes.py
-"""
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from src.infrastructure.fastapi.schemas import UsuarioCreate, UsuarioRead
 from src.infrastructure.fastapi.auth_schemas import Token
 from src.infrastructure.fastapi.dependencies import get_auth_use_cases
 from src.aplicacion.auth import CasosUsoAutenticacion
+from src.dominio.objetos_valor import CorreoElectronico
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
@@ -17,8 +14,9 @@ async def login(
     use_cases: CasosUsoAutenticacion = Depends(get_auth_use_cases)
 ):
     try:
+        correo = CorreoElectronico(direccion=form_data.username)
         return use_cases.iniciar_sesion(
-            correo=form_data.username,
+            correo=correo,
             contrasena=form_data.password,
         )
     except ValueError as e:

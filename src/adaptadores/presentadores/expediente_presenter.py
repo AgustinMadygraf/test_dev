@@ -1,12 +1,10 @@
-"""
-Path: src/adaptadores/presentadores/expediente_presenter.py
-"""
+# Path: src/adaptadores/presentadores/expediente_presenter.py
 
 from typing import Any, Dict, List
 from src.dominio.entidades.expediente import Expediente
 
-class ExpedientePresenter:
-    def format(self, expediente: Expediente) -> Dict[str, Any]:
+class PresentadorExpediente:
+    def formatear(self, expediente: Expediente) -> Dict[str, Any]:
         return {
             "numero_referencia": str(expediente.numero),
             "resumen": expediente.extracto.upper(),
@@ -17,5 +15,5 @@ class ExpedientePresenter:
             "es_editable": expediente.estado.value == "borrador"
         }
 
-    def format_list(self, expedientes: List[Expediente]) -> List[Dict[str, Any]]:
-        return [self.format(e) for e in expedientes]
+    def formatear_lista(self, expedientes: List[Expediente]) -> List[Dict[str, Any]]:
+        return [self.formatear(e) for e in expedientes]
