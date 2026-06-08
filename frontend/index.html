@@ -70,58 +70,64 @@
                                         <th>Número</th>
                                         <th>Extracto</th>
                                         <th>Owner</th>
+                                        <th>Detalle</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody id="expedientesTableBody" aria-live="polite">
-                                    <!-- JS content -->
+                                <tbody id="expedientesTableBody">
+                                    <!-- Aquí se cargan los expedientes -->
                                 </tbody>
                             </table>
                         </div>
-                        <div id="paginationContainer" class="p-3 border-top"></div>
                     </div>
+                    <div class="card-footer" id="paginationContainer"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal de Detalles -->
-    <div class="modal fade" id="detallesModal" tabindex="-1" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal fade" id="detallesModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title" id="modalTitle">Detalles del Expediente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar detalles"></button>
+                <div class="modal-header">
+                    <h5 class="modal-title">Expediente #<span id="modalNumero"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="text-muted small d-block">Número</label>
-                        <p id="modalNumero" class="fw-bold mb-0"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label class="text-muted small d-block">Extracto</label>
-                        <p id="modalExtracto" class="mb-0"></p>
-                    </div>
-                    <hr>
-                    <div class="mb-3">
-                        <label class="text-muted small d-block">Descripción Completa</label>
-                        <p id="modalDescripcion" class="mb-0 text-break"></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <p><strong>Extracto:</strong> <span id="modalExtracto"></span></p>
+                    <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Contenedor de Toasts -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
-        <div id="liveToast" class="toast" role="status">
-            <div class="toast-header">
-                <strong class="me-auto" id="toastTitle">Notificación</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar notificación"></button>
+    <!-- Modal de Edición -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Expediente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editId">
+                    <div class="mb-3">
+                        <label class="form-label">Nuevo Extracto</label>
+                        <input type="text" class="form-control" id="editExtracto">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveEditBtn">Guardar</button>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body" id="toastMessage"></div>
         </div>
     </div>

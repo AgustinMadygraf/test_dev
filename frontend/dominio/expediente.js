@@ -1,13 +1,13 @@
-/* Path: frontend/domain/expediente.js */
 export class Expediente {
     constructor(apiData) {
         this.id = apiData.id;
-        this.numero = apiData.numero;
-        this.extracto = apiData.extracto;
-        this.descripcion = apiData.descripcion ?? null;
-        this.estado = apiData.estado;
-        this.fecha_creacion = apiData.fecha_creacion;
-        this.id_propietario = apiData.id_propietario ?? apiData.responsable_id ?? apiData.owner_id ?? null;
+        this.numero = apiData.numero || apiData.numero_referencia;
+        this.extracto = apiData.extracto || apiData.resumen;
+        this.descripcion = apiData.descripcion || apiData.descripcion_detallada || null;
+        this.estado = apiData.estado || apiData.estado_actual;
+        this.fecha_creacion = apiData.fecha_creacion || apiData.fecha_apertura;
+        this.id_propietario = apiData.id_propietario;
+        this.es_editable = apiData.es_editable || false;
     }
     static fromApi(data) {
         return Array.isArray(data) ? data.map(item => new Expediente(item)) : new Expediente(data);

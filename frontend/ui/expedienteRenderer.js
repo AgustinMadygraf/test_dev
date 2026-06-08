@@ -7,12 +7,18 @@ export class ExpedienteRenderer {
         this.modal = typeof bootstrap !== 'undefined' ? new bootstrap.Modal(document.getElementById('detallesModal')) : null;
     }
     renderTable(expedientes, currentPage, totalPages) {
-        if (!this.tbody) return;
-        if (expedientes.length === 0) {
-            this.tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">No hay expedientes.</td></tr>';
+        if (!this.tbody) {
             return;
         }
-        this.tbody.innerHTML = expedientes.map(exp => this._createRowHTML(exp)).join('');
+        if (expedientes.length === 0) {
+            this.tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No hay expedientes.</td></tr>';
+            return;
+        }
+        const rows = expedientes.map(exp => {
+            const html = this._createRowHTML(exp);
+            return html;
+        }).join('');
+        this.tbody.innerHTML = rows;
         this.renderPagination(currentPage, totalPages);
     }
     renderPagination(currentPage, totalPages) {
@@ -30,12 +36,18 @@ export class ExpedienteRenderer {
     }
     _createRowHTML(exp) {
         const escape = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
+        // Debugging the property access
+        const actions = exp.es_editable 
+            ? `<button class="btn btn-sm btn-outline-primary edit-btn" data-id="${exp.id}" data-extracto="${escape(exp.extracto)}" data-descripcion="${escape(exp.descripcion || '')}">✏️</button> 
+               <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${exp.id}">🗑️</button>`
+            : '';
         return `<tr>
             <td><span class="text-muted small">#${exp.id}</span></td>
             <td><strong class="text-primary">${escape(exp.numero)}</strong></td>
             <td>${escape(exp.extracto)}</td>
             <td><span class="badge rounded-pill bg-light text-dark border">Owner: ${exp.id_propietario ?? 'N/A'}</span></td>
             <td><button class="btn btn-sm btn-link detalle-btn" data-numero="${escape(exp.numero)}" data-extracto="${escape(exp.extracto)}" data-descripcion="${escape(exp.descripcion || '')}">Ver más</button></td>
+            <td>${actions}</td>
         </tr>`;
     }
     showToast(message, isError = false) {

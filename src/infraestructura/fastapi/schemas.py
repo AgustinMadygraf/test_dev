@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, PlainSerializer, BeforeValidator
+from pydantic import BaseModel, ConfigDict, PlainSerializer, BeforeValidator, computed_field
 from typing import Annotated, Optional, Any
 from datetime import datetime
 from src.dominio.entidades.expediente import EstadoExpediente
@@ -35,6 +35,11 @@ class ExpedienteRead(BaseModel):
     estado: EstadoExpediente
     fecha_creacion: datetime
     ultima_modificacion: datetime
+
+    @computed_field
+    @property
+    def es_editable(self) -> bool:
+        return self.estado == EstadoExpediente.BORRADOR
 
     model_config = ConfigDict(from_attributes=True)
 

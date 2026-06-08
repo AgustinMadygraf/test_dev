@@ -1,4 +1,3 @@
-/* Path: frontend/main.js */
 import { expedienteService } from './infraestructura/expedienteService.js';
 import { authService } from './infraestructura/authService.js';
 import { ExpedienteRenderer } from './ui/expedienteRenderer.js';
@@ -11,6 +10,7 @@ class ExpedienteApp {
         this.fullData = [];
         this.currentPage = 1;
         this.itemsPerPage = 5;
+        this.editModal = typeof bootstrap !== 'undefined' ? new bootstrap.Modal(document.getElementById('editModal')) : null;
     }
 
     async init() {
@@ -29,9 +29,17 @@ class ExpedienteApp {
         document.getElementById('refreshBtn')?.addEventListener('click', () => this.load());
         
         document.getElementById('expedientesTableBody')?.addEventListener('click', (e) => {
-            const btn = e.target.closest('.detalle-btn');
-            if (btn) this.ui.showDetailsModal(btn.dataset.numero, btn.dataset.extracto, btn.dataset.descripcion);
+            const btnDetalle = e.target.closest('.detalle-btn');
+            if (btnDetalle) this.ui.showDetailsModal(btnDetalle.dataset.numero, btnDetalle.dataset.extracto, btnDetalle.dataset.descripcion);
+            
+            const btnDelete = e.target.closest('.delete-btn');
+            if (btnDelete) this.handleDelete(btnDelete.dataset.id);
+            
+            const btnEdit = e.target.closest('.edit-btn');
+            if (btnEdit) this.openEditModal(btnEdit);
         });
+
+        document.getElementById('saveEditBtn')?.addEventListener('click', () => this.handleSaveEdit());
 
         document.getElementById('paginationContainer')?.addEventListener('click', (e) => {
             const btn = e.target.closest('.pagination-btn');
@@ -84,6 +92,37 @@ class ExpedienteApp {
             this.ui.showToast(err.message, true);
         } finally {
             UIUtils.setLoading('submitBtn', false);
+        }
+    }
+
+    async handleDelete(id) {
+        if (!confirm('¿Seguro que querés eliminar este expediente?')) return;
+        try {
+            await expedienteService.delete(id);
+            this.ui.showToast('Eliminado con éxito');
+            await this.load();
+        } catch (err) {
+            this.ui.showToast(err.message, true);
+        }
+    }
+
+    openEditModal(btn) {
+        document.getElementById('editId').value = btn.dataset.id;
+        document.getElementById('editExtracto').value = btn.dataset.extracto;
+        if (this.editModal) this.editModal.show();
+    }
+
+    async handleSaveEdit() {
+        const id = document.getElementById('editId').value;
+        const payload = { extracto: document.getElementById('editExtracto').value };
+        
+        try {
+            await expedienteService.update(id, payload);
+            this.ui.showToast('Actualizado con éxito');
+            if (this.editModal) this.editModal.hide();
+            await this.load();
+        } catch (err) {
+            this.ui.showToast(err.message, true);
         }
     }
 }

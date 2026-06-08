@@ -41,6 +41,17 @@ export class ApiClient {
             body: JSON.stringify(body)
         });
     }
+    patch(endpoint, body, options = {}) {
+        return this.request(endpoint, {
+            ...options,
+            method: "PATCH",
+            headers: { "Content-Type": "application/json", ...options.headers },
+            body: JSON.stringify(body)
+        });
+    }
+    delete(endpoint, options = {}) {
+        return this.request(endpoint, { ...options, method: "DELETE" });
+    }
     postForm(endpoint, formData, options = {}) {
         return this.request(endpoint, {
             ...options,
