@@ -3,7 +3,7 @@ services:
     build: .
     container_name: sistema_expedientes
     ports:
-      - "8000:8000"
+      - "${HOST_PORT:-8000}:8000"
     env_file:
       - .env
     volumes:

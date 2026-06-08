@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PORT=8000
+PORT=${HOST_PORT:-8000}
 
 # Cerrar procesos locales que usen el puerto
 if lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null ; then
