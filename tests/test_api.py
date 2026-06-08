@@ -107,3 +107,22 @@ def test_auth_register_api_failure(client, mock_uow):
     response = client.post("/auth/register", json={"correo": "exists@test.com", "contrasena": "any"})
     assert response.status_code == 400
 
+
+def test_api_actualizar_expediente(client, mock_uow, mock_user):
+    mock_exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="Old", id_propietario=mock_user.id)
+    mock_uow.expedientes.buscar_por_id.return_value = mock_exp
+    mock_uow.expedientes.actualizar.return_value = mock_exp
+    
+    response = client.patch("/expedientes/1", json={"extracto": "New"})
+    
+    assert response.status_code == 200
+    mock_uow.expedientes.actualizar.assert_called_once()
+
+def test_api_eliminar_expediente(client, mock_uow, mock_user):
+    mock_exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="Test", id_propietario=mock_user.id)
+    mock_uow.expedientes.buscar_por_id.return_value = mock_exp
+    
+    response = client.delete("/expedientes/1")
+    
+    assert response.status_code == 204
+    mock_uow.expedientes.eliminar.assert_called_once_with(1)

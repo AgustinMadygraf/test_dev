@@ -98,3 +98,24 @@ def test_uow_rollback_on_exception(mock_session):
         with uow:
             raise Exception("DB Error")
     mock_session.rollback.assert_called()
+
+def test_database_adapter_actualizar(mock_session):
+    adapter = SQLAlchemyDatabaseAdapter(mock_session)
+    mock_orm = ExpedienteORM(id=1, numero="123", extracto="Old", id_propietario=1)
+    mock_session.get.return_value = mock_orm
+    
+    exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="New", id_propietario=1)
+    adapter.actualizar(exp)
+    
+    assert mock_orm.extracto == "New"
+    mock_session.flush.assert_called_once()
+
+def test_database_adapter_eliminar(mock_session):
+    adapter = SQLAlchemyDatabaseAdapter(mock_session)
+    mock_orm = ExpedienteORM(id=1, numero="123", extracto="Test", id_propietario=1)
+    mock_session.get.return_value = mock_orm
+    
+    adapter.eliminar(1)
+    
+    mock_session.delete.assert_called_once_with(mock_orm)
+    mock_session.flush.assert_called_once()

@@ -100,3 +100,28 @@ def test_obtener_expediente(expediente_use_cases, mock_uow):
     
     # Assert
     assert result == mock_exp
+
+def test_actualizar_expediente_success(expediente_use_cases, mock_uow):
+    mock_exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="Old", id_propietario=1)
+    mock_uow.expedientes.buscar_por_id.return_value = mock_exp
+    mock_uow.expedientes.actualizar.return_value = mock_exp
+    
+    result = expediente_use_cases.actualizar_expediente(1, 1, extracto="New")
+    
+    assert result.extracto == "New"
+    mock_uow.expedientes.actualizar.assert_called_once()
+
+def test_eliminar_expediente_success(expediente_use_cases, mock_uow):
+    mock_exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="Test", id_propietario=1)
+    mock_uow.expedientes.buscar_por_id.return_value = mock_exp
+    
+    expediente_use_cases.eliminar_expediente(1, 1)
+    
+    mock_uow.expedientes.eliminar.assert_called_once_with(1)
+
+def test_actualizar_expediente_forbidden(expediente_use_cases, mock_uow):
+    mock_exp = Expediente(id=1, numero=NumeroExpediente("123"), extracto="Old", id_propietario=1)
+    mock_uow.expedientes.buscar_por_id.return_value = mock_exp
+    
+    with pytest.raises(ErrorViolacionReglaNegocio, match="No tiene permisos"):
+        expediente_use_cases.actualizar_expediente(1, 99, extracto="New")
